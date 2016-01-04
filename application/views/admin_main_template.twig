@@ -1,0 +1,20 @@
+{% include '_parts/head.twig' %}
+<body>
+<div class = "wrapper">
+    <div class = "maincontent">
+            {% include '_parts/header.twig' %}
+        <div class="container">
+            <div class="row main">
+                    <div class="col-md-3">
+                        {% include '_parts/left_bar.twig' %}
+                    </div>
+                    <div class="col-md-9">
+                        {% block header %}{% endblock%}
+                        {% block content %}{% endblock %}
+                    </div>
+                </div>
+            </div>
+    </div>
+</div>
+    {% include '_parts/footer.twig' %}
+</body>
