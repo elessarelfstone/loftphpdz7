@@ -1,4 +1,9 @@
 $(document).ready(function(){
+    function f() {
+        $('#regAuth').modal('hide');
+    }
+
+
     $("#submit").click(function(){
         $('#login-form').submit();
 
@@ -54,9 +59,10 @@ $(document).ready(function(){
                     dataType: 'json',
                     success : function(dataSuccess){
                         if (dataSuccess.result.status == 0){
-                            $('#regAuth').modal('hide');
-                            $('#error_message').text('Ваша учетная запись создана. Требуется активация вашей учётной записи администратором');
-                            $('error').modal();
+                            $('#reg_error_message').text('Ваша учетная запись создана. Требуется активация вашей учётной записи администратором');
+                            setTimeout(function () {
+                                $('#regAuth').modal('hide');
+                            }, 3000);
                         }
                         else
                         {

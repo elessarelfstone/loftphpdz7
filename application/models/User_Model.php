@@ -21,7 +21,6 @@ class User_Model extends LOFT_Model
             }
             else
                 $result['status'] = 1;
-
         }
         else
                 $result['status'] = 2;
