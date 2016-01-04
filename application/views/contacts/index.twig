@@ -1,0 +1,16 @@
+{% extends 'main_template.twig' %}
+
+{% block header %}
+    <h3>  {{ title }} </h3>
+{% endblock %}
+
+{% block content %}
+
+    <h4>Наш адрес</h4>
+    <p>Москва, 3-я улица Строителей, дом 25, квартира 12</p>
+    <h4>Телефоны</h4>
+    <p>87663453455</p>
+    <h4>Где мы находимся</h4>
+    <div class="map"></div>
+    {{ form | raw }}
+{% endblock %}

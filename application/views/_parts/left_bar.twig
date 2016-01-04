@@ -1,0 +1,7 @@
+<div class="list-group">
+    {% for category in categories %}
+                    <a href="{{ base_url }}products/{{ category.id }}" class =  "list-group-item {% if category.id == active_cat_id  %} active {% endif %} ">
+                        <span>{{ category.title | capitalize }}</span>
+                    </a>
+    {% endfor %}
+</div>

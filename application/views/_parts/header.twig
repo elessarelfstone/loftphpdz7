@@ -1,0 +1,22 @@
+<!-- HEADER -->
+<nav class="navbar navbar-fixed-top navbar-inverse relative">
+    <div class="container">
+        <div id="navbar" class="collapse navbar-collapse">
+            <a class="navbar-brand" href="/">Интернет-каталог LOFT</a>
+            <a class="cart {% if name is not defined %}hidden{% endif %}" href="{{ base_url }}orders">
+                <span class="icon_cart">
+                </span>
+                <span class="goods-cnt">{% if name is defined %}{{ cnt }}{% endif %}</span>
+            </a>
+            <a href="{{ base_url }}user/logout" class="btn btn-primary btn-xs reg-login active {% if name is not defined %}hidden{% endif %}" role="button" id="log_out">Выйти</a>
+            <a href="#" class="btn btn-primary btn-xs reg-login active {% if name is defined %}hidden{% endif %}" role="button" id="reg" data-toggle="modal" data-target="#regAuth">Регистрация</a>
+            <a href="#" class="btn btn-success btn-xs reg-login active {% if name is defined %}hidden{% endif %}" role="button" data-toggle="modal" data-target="#loginAuth" id="log_in">Войти</a>
+            <ul class="nav navbar-nav right">
+                <li><a href="{{ base_url }}test">Поиск</a></li>
+                <li><a href="{{ base_url }}payment">Способы оплаты</a></li>
+                <li><a href="{{ base_url }}contacts">Обратная связь</a></li>
+                <li id="fio" ><span class="fio">{% if name is defined %}{{ [lastname, name]|join(' ')}} {% endif %} </span></li>
+            </ul>
+        </div>
+    </div>
+</nav>

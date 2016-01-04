@@ -1,0 +1,104 @@
+{% include '_parts/head.twig' %}
+<body>
+
+<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="error">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="exampleModalLabel2"></h4>
+            </div>
+            <div class="modal-body"><p id="error_message">Для добавление товара в корзину необходимо авторизоваться.</p></div>
+        </div>
+    </div>
+</div>
+<div class="modal fade " id="loginAuth" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Вход на сайт</h4>
+            </div>
+            <div class="modal-body">
+                <p id="error_message"></p>
+            </div>
+            <div class="modal-body">
+                <form id="login-form" method="post" action="user/login">
+                    <div class="form-group">
+                        <label for="login" class="control-label">Логин</label>
+                        <input type="email" class="form-control" id="login" name="email" placeholder="Ваш e-mail">
+                    </div>
+                    <div class="form-group">
+                        <label for="pass" class="control-label">Пароль</label>
+                        <input type="password" class="form-control" id="pass" name="password" placeholder="Ваш пароль">
+                    </div>
+                    <input id="modeModal" type="hidden" value="">
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="closeform">Закрыть</button>
+                <button type="button" class="btn btn-primary" id="submit">Войти</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade " id="regAuth" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Вход на сайт</h4>
+            </div>
+            <div class="modal-body">
+                <p id="reg_error_message"></p>
+            </div>
+            <div class="modal-body">
+                <form id="reg-form" method="post" action="user/logreg">
+                    <div class="form-group" id="frmgrpname">
+                        <label for="name" class="control-label">Имя</label>
+                        <input type="text" class="form-control" id="name" name="name" placeholder="Имя">
+                    </div>
+                    <div class="form-group" id="frmgrplastname" >
+                        <label for="lastname" class="control-label" >Фамилия</label>
+                        <input type="text" class="form-control" id="lastname" name="lastname" placeholder="Фамилия">
+                    </div>
+                    <div class="form-group" id="frmgrpbirthday">
+                        <label for="login" class="control-label">День рождения</label>
+                        <input type="email" class="form-control" id="birthday" name="birthday" placeholder="День рождения">
+                    </div>
+                    <div class="form-group">
+                        <label for="login" class="control-label">Логин</label>
+                        <input type="email" class="form-control" id="login" name="email" placeholder="Ваш e-mail">
+                    </div>
+                    <div class="form-group">
+                        <label for="pass" class="control-label">Пароль</label>
+                        <input type="password" class="form-control" id="pass" name="password" placeholder="Ваш пароль">
+                    </div>
+                    <input id="modeModal" type="hidden" value="">
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="closeform">Закрыть</button>
+                <button type="button" class="btn btn-primary" id="submit_reg">Зарегистрироваться</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class = "wrapper">
+    <div class = "maincontent">
+            {% include '_parts/header.twig' %}
+        <div class="container">
+            <div class="row main">
+                    <div class="col-md-3">
+                        {% include '_parts/left_bar.twig' %}
+                    </div>
+                    <div class="col-md-9">
+                        {% block header %}{% endblock%}
+                        {% block content %}{% endblock %}
+                    </div>
+                </div>
+            </div>
+    </div>
+</div>
+    {% include '_parts/footer.twig' %}
+</body>
