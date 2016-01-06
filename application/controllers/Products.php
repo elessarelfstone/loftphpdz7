@@ -50,4 +50,35 @@ class Products extends LOFT_Controller
 
         $this->display('products/products');
     }
+
+    // TODO метод для отображения информации о товаре контроллера products
+
+    /**
+     *
+     * Метод для отображения страницы с информацией о товаре
+     *
+     * УРЛ: /products/product/[ID]
+     *
+     * @param $id - ID товара
+     */
+    public function product($id)
+    {
+        // подгружаем модель для работы с БД
+        $this->load->model('Products_Model');
+
+        // делаем запрос в БД по переданному ID
+        $product_info = $this->Products_Model->getProductByID($id);
+
+        // Устанавливаем тайтл страницы = значению поля title
+        $this->setToData('title', 'Информация о товаре — '. $product_info->title);
+
+        // подгружаем хелпер, получаем HTML-код для отображения информации о товаре
+        $this->load->helper('htmlelement');
+        $temp = getHtmlForProduct($product_info);
+        $this->setToData('product_info', $temp);
+
+        // отображаем страницу через шаблон product.twig
+        $this->display('products/product');
+
+    }
 }
