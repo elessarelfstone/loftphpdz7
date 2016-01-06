@@ -6,7 +6,7 @@ class Products_Model extends LOFT_Model
 
     public function products_count_by_cat($category_id)
     {
-        $result = parent::getAll(array('id_category'=>$category_id));
+        $result = parent::getAll(array('id_category' => $category_id));
         return count($result);
     }
 
@@ -16,11 +16,21 @@ class Products_Model extends LOFT_Model
         return $result;
     }
 
-    public function getProductsByCategory($cat, $limit ,$start)
+    public function getProductsByCategory($cat, $limit, $start)
     {
-        $this->db->where(array('id_category'=>$cat));
+        $this->db->where(array('id_category' => $cat));
         $this->db->limit($limit, $start);
         $result = $this->db->get($this->table);
+        return $result->result_array();
+    }
+
+    public function getAllProdusts()
+    {
+        $this->db->select('goods.id, goods.title as product_title, goods.cnt, goods.price, goods.description, categoryes.title as cat_title, brand.title as brand_title');
+        $this->db->from('goods');
+        $this->db->join('categoryes', 'goods.id_category = categoryes.id');
+        $this->db->join('brand', 'brand.id = goods.id_brand');
+        $result = $this->db->get();
         return $result->result_array();
     }
 
