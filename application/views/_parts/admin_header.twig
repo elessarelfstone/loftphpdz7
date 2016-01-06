@@ -2,15 +2,12 @@
 <nav class="navbar navbar-fixed-top navbar-inverse relative">
     <div class="container">
         <div id="navbar" class="collapse navbar-collapse">
-            <a class="navbar-brand" href="/">Админ-панель Интернет-каталога LOFT</a>
-
-
+            <a class="navbar-brand" href="{{ base_url }}admin/categories">Админ-панель </a>
             <ul class="nav navbar-nav right">
                 <li><a href="{{ base_url }}admin\categories">Список категорий</a></li>
                 <li><a href="{{ base_url }}admin\products">Список товаров</a></li>
                 <li><a href="{{ base_url }}admin\orders">Список заказов</a></li>
                 <li><a href="{{ base_url }}admin\users">Список пользователей</a></li>
-                <li id="fio" ><span class="fio">{% if name is defined %}{{ [lastname, name]|join(' ')}} {% endif %} </span></li>
             </ul>
         </div>
     </div>

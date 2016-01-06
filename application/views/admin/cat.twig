@@ -1,0 +1,16 @@
+{% extends 'admin_main_template.twig' %}
+
+{% block content %}
+    <div>
+        <form  method="post" action="{{ base_url }}admin/{{ mode }}cat">
+            <div class="form-group" id="frmgrpname">
+                <label for="name" class="control-label">Название категории</label>
+                <input type="text" class="form-control" id="name" name="name" value="{% if mode == 'edit' %}{{ title }}{% endif %}">
+            </div>
+            <input id="mode" name="mode" type="hidden" value="{{ mode }}">
+
+            <div class="modal-footer"><input class="btn btn-primary" type="submit" value="{% if mode == 'edit' %} Изменить{% else %} Добавить {% endif %}"></div>
+        </form>
+    </div>
+
+{% endblock %}

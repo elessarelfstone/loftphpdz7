@@ -56,5 +56,11 @@ $route['user/login'] = 'user/login';
 $route['products/(:num)/(:page)'] = "products/index/$1/$2";
 $route['products/(:num)'] = "products/index/$1";
 $route['user/add/(:num)'] = "user/add/$1";
+$route['admin'] = "admin/categories";
+$route['admin/addcat'] = "admin/addcat";
+$route['admin/editcat/(:id)'] = "admin/editcat/$1";
+$route['admin/deletecat/(:id)'] = "admin/deletecat/$1";
+
+
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
