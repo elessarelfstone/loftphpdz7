@@ -24,6 +24,7 @@ class Products_Model extends LOFT_Model
         return $result->result_array();
     }
 
+
     public function getAllProdusts()
     {
         $this->db->select('goods.id, goods.title as product_title, goods.cnt, goods.price, goods.description, categoryes.title as cat_title, brand.title as brand_title');
@@ -32,6 +33,23 @@ class Products_Model extends LOFT_Model
         $this->db->join('brand', 'brand.id = goods.id_brand');
         $result = $this->db->get();
         return $result->result_array();
+    }
+
+
+//    TODO: в getProductByID дописать джоин id_category, id_brand
+
+    /**
+     *
+     * Метод получения информации из БД по товару с ID = $id
+     *
+     * @param $id - ID товара для поиска
+     * @return mixed - инфа о товаре
+     */
+    public function getProductById($id)
+    {
+        $this->db->where(array('id'=>$id));
+        $result = $this->db->get($this->table);
+        return $result->row();
     }
 
 }
