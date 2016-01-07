@@ -1,1 +1,38 @@
 {% extends 'main_template.twig' %}
+
+{% block header %}
+    <h3>  {{ title }} </h3>
+{% endblock %}
+{% block content %}
+<form method="GET">
+<select name="category">
+    {% for item in select_category %}
+
+        <option value="{{ item.id }}">{{ item.title }}</option>
+
+    {% endfor %}
+
+</select>
+
+    <select name="brand">
+        {% for item in select_brands %}
+
+            <option value="{{ item.id }}">{{ item.title }}</option>
+
+        {% endfor %}
+
+    </select>
+<br />
+    <label>Мин цена<input type="text" name="minprice" value="0"></label>
+    <label>Макс цена<input type="text" name="maxprice" value="99999999"></label>
+
+    <input type="submit" value="Найти">
+</form>
+    {% for item in searching_products %}
+
+        {{ item.title }}<br />
+
+    {% endfor %}
+
+
+{% endblock %}

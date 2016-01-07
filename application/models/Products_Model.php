@@ -41,5 +41,13 @@ class Products_Model extends LOFT_Model
     }
 
 
+    public function getProductsFromSearch($array)
+    {
+        $this->db->where(array('id_category'=>$array["category"], 'id_brand'=>$array["brand"], 'price>='=>$array["minprice"], 'price<='=>$array["maxprice"]));
+        $result = $this->db->get($this->table);
+        return $result->result_array();
+    }
+
+
 
 }
