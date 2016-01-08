@@ -12,7 +12,7 @@
             <a href="#" class="btn btn-primary btn-xs reg-login active {% if name is defined %}hidden{% endif %}" role="button" id="reg" data-toggle="modal" data-target="#regAuth">Регистрация</a>
             <a href="#" class="btn btn-success btn-xs reg-login active {% if name is defined %}hidden{% endif %}" role="button" data-toggle="modal" data-target="#loginAuth" id="log_in">Войти</a>
             <ul class="nav navbar-nav right">
-                <li><a href="{{ base_url }}test">Поиск</a></li>
+                <li><a href="{{ base_url }}search">Поиск</a></li>
                 <li><a href="{{ base_url }}payment">Способы оплаты</a></li>
                 <li><a href="{{ base_url }}contacts">Обратная связь</a></li>
                 <li id="fio" ><span class="fio">{% if name is defined %}{{ [lastname, name]|join(' ')}} {% endif %} </span></li>
