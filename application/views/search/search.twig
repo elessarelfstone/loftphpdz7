@@ -8,7 +8,9 @@
 <select name="category">
     {% for item in select_category %}
 
-        <option value="{{ item.id }}">{{ item.title }}</option>
+        <option value="{{ item.id }}" {% if memory_category==item.id  %}
+        selected
+        {% endif %}>{{ item.title }}</option>
 
     {% endfor %}
 
@@ -17,22 +19,24 @@
     <select name="brand">
         {% for item in select_brands %}
 
-            <option value="{{ item.id }}">{{ item.title }}</option>
+            <option value="{{ item.id }}" {% if memory_brand==item.id  %}
+            selected
+                    {% endif %}>{{ item.title }}</option>
 
         {% endfor %}
 
     </select>
 <br />
-    <label>Мин цена<input type="text" name="minprice" value="0"></label>
-    <label>Макс цена<input type="text" name="maxprice" value="99999999"></label>
+    <label>Мин цена<input type="text" name="minprice" value="{% if memory_minprice %}{{memory_minprice}}{% else %}0{% endif %}"></label>
+    <label>Макс цена<input type="text" name="maxprice" value="{% if memory_maxprice %}{{memory_maxprice}}{% else %}999999999{% endif %}"></label>
 
     <input type="submit" value="Найти">
 </form>
     {% for item in searching_products %}
 
-        {{ item.title }}<br />
+        <a href="products/product/{{ item.id }}">{{ item.title }}</a> - {{ item.price }} &#8381;<br />
 
     {% endfor %}
-
+{{ error }}
 
 {% endblock %}
