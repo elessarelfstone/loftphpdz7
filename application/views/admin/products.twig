@@ -1,0 +1,17 @@
+{% extends 'admin_main_template.twig' %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-2 col-md-offset-10"><a href="{{ base_url }}admin/addprod">Добавить</a></div>
+    </div>
+    {% for product in products %}
+        <div class="row">
+            <div class="col-md-3"><span>{{product.product_title}}</span></div>
+            <div class="col-md-3"><span>{{product.cat_title}}</span></div>
+            <div class="col-md-3"><span>{{product.brand_title}}</span></div>
+            <div class="col-md-1"><span>{{product.price}}</span></div>
+            <div class="col-md-1"><a href="{{ base_url }}admin/editprod/{{ product.id }}"><span>Изменить</span></a></div>
+            <div class="col-md-1"><a href="{{ base_url }}admin/deleteprod/{{ product.id }}"><span>Удалить</span></a></div>
+        </div>
+    {% endfor %}
+{% endblock %}

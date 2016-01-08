@@ -2,25 +2,43 @@
 
 {% block content %}
     <div>
-        <form  method="post" action="{{ base_url }}admin/{{ mode }}cat">
-            <div class="form-group" >
+        <form method="post" action="{{ base_url }}admin/{{ mode }}prod">
+            <div class="form-group">
                 <label for="name" class="control-label">Название товара</label>
-                <input type="text" class="form-control" id="name" name="name" value="{% if mode == 'edit' %}{{ title }}{% endif %}">
+                <input type="text" class="form-control" id="name" name="name"
+                       value="{% if mode == 'edit' %}{{ product.product_title }}{% endif %}">
             </div>
-            <div class="form-group" >
+            <div class="form-group">
                 <label for="name" class="control-label">Категория</label>
-                <input type="text" class="form-control" id="name" name="name" value="{% if mode == 'edit' %}{{ cat_title }}{% endif %}">
+                <select class="form-control" name="cat_title">
+                    {% for cat in cats %}
+                        <option value="{{ cat.id }}" {% if mode == 'edit' and product.cat_id == cat.id %} selected {% endif %}>{{ cat.title }}</option>
+                    {% endfor %}
+                </select>
             </div>
-            <div class="form-group" >
+            <div class="form-group">
                 <label for="name" class="control-label">Брэнд</label>
-                <input type="text" class="form-control" id="name" name="name" value="{% if mode == 'edit' %}{{ brand_title }}{% endif %}">
+                <select class="form-control" name="brand_title">
+                    {% for brand in brands %}
+                        <option value="{{ brand.id }}" {% if mode == 'edit' and product.brand_id == brand.id %} selected {% endif %}>{{ brand.title }}</option>
+                    {% endfor %}
+                </select>
             </div>
-            <div class="form-group" >
+            <div class="form-group ">
                 <label for="name" class="control-label">Цена</label>
-                <input type="text" class="form-control" id="name" name="name" value="{% if mode == 'edit' %}{{ price }}{% endif %}">
+                <input type="text" class="form-control" id="name" name="price"
+                       value="{% if mode == 'edit' %}{{ product.price }}{% endif %}">
+            </div>
+            <div class="form-group ">
+                <label for="descr" class="control-label">Описание</label>
+                <textarea name="descr" class="form-control">{% if mode == 'edit' %}{{ product.description }}{% endif %}</textarea>
             </div>
             <input id="mode" name="mode" type="hidden" value="{{ mode }}">
-            <div class="modal-footer"><input class="btn btn-primary" type="submit" value="{% if mode == 'edit' %} Изменить{% else %} Добавить {% endif %}"></div>
+            <input id="mode" name="id" type="hidden" value="{{ product.id }}">
+
+            <div class="modal-footer"><input class="btn btn-primary" type="submit"
+                                             value="{% if mode == 'edit' %} Изменить{% else %} Добавить {% endif %}">
+            </div>
         </form>
     </div>
 

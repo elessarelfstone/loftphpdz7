@@ -25,7 +25,7 @@ class Products_Model extends LOFT_Model
     }
 
 
-    public function getAllProdusts()
+    public function getAllProducts()
     {
         $this->db->select('goods.id, goods.title as product_title, goods.cnt, goods.price, goods.description, categoryes.title as cat_title, brand.title as brand_title');
         $this->db->from('goods');
@@ -33,6 +33,17 @@ class Products_Model extends LOFT_Model
         $this->db->join('brand', 'brand.id = goods.id_brand');
         $result = $this->db->get();
         return $result->result_array();
+    }
+
+    public function getProductById2($id)
+    {
+        $this->db->select('goods.id, goods.title as product_title, goods.cnt, goods.price, goods.description, categoryes.title as cat_title, brand.title as brand_title, brand.id as brand_id, categoryes.id as cat_id');
+        $this->db->from('goods');
+        $this->db->join('categoryes', 'goods.id_category = categoryes.id');
+        $this->db->join('brand', 'brand.id = goods.id_brand');
+        $this->db->where(array('goods.id'=>$id));
+        $result = $this->db->get();
+        return $result->row_array();
     }
 
 

@@ -60,6 +60,9 @@ $route['admin'] = "admin/categories";
 $route['admin/addcat'] = "admin/addcat";
 $route['admin/editcat/(:id)'] = "admin/editcat/$1";
 $route['admin/deletecat/(:id)'] = "admin/deletecat/$1";
+$route['admin/products'] = "admin/products";
+$route['admin/addprod'] = "admin/addprod";
+$route['admin/editprod/(:id)'] = "admin/editprod/$1";
 
 
 $route['404_override'] = '';

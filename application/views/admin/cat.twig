@@ -8,6 +8,7 @@
                 <input type="text" class="form-control" id="name" name="name" value="{% if mode == 'edit' %}{{ title }}{% endif %}">
             </div>
             <input id="mode" name="mode" type="hidden" value="{{ mode }}">
+            <input id="mode" name="id" type="hidden" value="{{ id }}">
 
             <div class="modal-footer"><input class="btn btn-primary" type="submit" value="{% if mode == 'edit' %} Изменить{% else %} Добавить {% endif %}"></div>
         </form>

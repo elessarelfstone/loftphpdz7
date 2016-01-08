@@ -18,7 +18,7 @@ $(document).ready(function(){
             e.preventDefault();
             var formdata = $(this).serialize();
             var dest_url;
-            dest_url = 'http://loftphpdz7.local:8888/user/login';
+            dest_url = 'http://loftphpdz7/user/login';
             $.ajax({
                 url: dest_url,
                 type: 'post',

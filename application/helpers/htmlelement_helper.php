@@ -7,7 +7,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     {
         $result = '';
         $divided_products = array_chunk($products, 3, true);
-        $col_template = '<div class="col-md-4"><div class="img-circle"><a href=":base_url:products/product/:num"><img src="" alt=""></a></div><div class="bold"><a href=":base_url:products/product/:num" class="products_links">:title</a></div><p>:descr</p><p><a href=":base_url:user/add/:product_id" class="addProduct btn btn-primary btn-xs">В корзину</a></p></div>';
+        $col_template = '<div class="col-md-4"><div class="img-circle"><a href=":base_url:products/product/:num"><img src="" alt=""></a></div><div class="bold"><a href=":base_url:products/product/:num" class="products_links">:title</a></div><p>:descr</p><p>Цена: &nbsp; :price</p><p><a href=":base_url:user/add/:product_id" class="addProduct btn btn-primary btn-xs">В корзину</a></p></div>';
         foreach ($divided_products as $products){
             $row = '<div class="row">';
             foreach ($products as $product){
@@ -15,6 +15,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 $temp = str_replace(':descr', mb_substr($product['description'],0,25).'...', $temp);
                 $temp = str_replace(':base_url:', base_url(), $temp);
                 $temp = str_replace(':num', $product['id'], $temp);
+                $temp = str_replace(':price', $product['price'], $temp);
                 $temp = str_replace(':product_id', $product['id'], $temp);
                 $row .= $temp;
             }
