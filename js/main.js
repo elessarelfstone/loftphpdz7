@@ -86,7 +86,6 @@ $(document).ready(function(){
                     if (dataSuccess.result.status == 0){
                         var cnt = dataSuccess.result.cnt;
                         $('.goods-cnt').text(cnt);
-
                     }
                     else
                     {
