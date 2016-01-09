@@ -99,6 +99,7 @@ function getHtmlForBasket($basket){
                 <th>Наименование товара</th>
                 <th>Количество</th>
                 <th>Цена</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -109,6 +110,7 @@ END;
                 <td><a href="{url}">{title}</a></td>
                 <td>{count}</td>
                 <td>{price}</td>
+                <td><a href="{href_delete}"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a></td>
             </tr>
 END;
 
@@ -120,14 +122,16 @@ END;
                     '{url}',
                     '{title}',
                     '{count}',
-                    '{price}'
+                    '{price}',
+                    '{href_delete}'
                 ),
                 array(
                     $line_number,
                     base_url() . 'products/product/' . $item['id_goods'],
                     $item['title'],
                     $item['cnt'],
-                    $item['cnt'] * $item['price']
+                    $item['cnt'] * $item['price'],
+                    base_url() . 'orders/clear/' . $item['id_goods']
                 ),
                 $line_template
             );
@@ -135,7 +139,7 @@ END;
             $total_price += $item['cnt'] * $item['price'];
         }
 
-        $result .= '<tr><td colspan="3" align="right">Итого к оплате:</td><td>' . $total_price . '</td></tr>';
+        $result .= '<tr><td colspan="2"><a href="'. base_url() .'orders/clear" class="btn btn-primary btn-xs">Очистить корзину</a></td><td align="right">Итого к оплате:</td><td>' . $total_price . '</td></tr>';
 
         $result .= '</tbody></table></div>';
     }

@@ -49,4 +49,28 @@ class Cart_Model extends LOFT_Model
         }
 
     }
+
+
+    /**
+     *
+     * Метод очистки корзины / удаления товара из корзины
+     *
+     * @param $user_id - ID пользователя
+     * @param null $id_goods - ID товара, который нужно удалить из корзины
+     * @return bool
+     */
+    public function clearBasket($user_id, $id_goods = null)
+    {
+        if($id_goods)
+        {
+            // Если передаётся id_goods, то удаляем этот товар
+            $this->delete(array('id_user'=>$user_id, 'id_goods'=> $id_goods));
+        } else
+        {
+            // Если id_goods = null, то удаляем всё из корзины
+            $this->delete(array('id_user'=>$user_id));
+        }
+
+        return true;
+    }
 }
