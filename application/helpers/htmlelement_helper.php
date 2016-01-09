@@ -33,10 +33,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  * @param $product_info – массив с данными о товаре
  * @return string - HTML-код
  */
-function getHtmlForProduct($product_info)
-{
-    $result = '';
-
+function getHtmlForProduct($product_info){
     // HTML-шаблон разметки информации о товаре
     $template = <<<END
 <div class="col-md-12">
@@ -74,3 +71,81 @@ END;
 
     return $result;
 }
+
+/**
+ *
+ * Генератор HTML-шаблона корзины
+ *
+ * @author Paintcast
+ *
+ * @param $basket – массив, содержимое корзины
+ * @return string - HTML-код
+ *
+ */
+
+function getHtmlForBasket($basket){
+
+    // если корзина не пуста
+    if($basket)
+    {
+        $line_number = 1;
+        $total_price = 0;
+        $result = <<<END
+<div class="col-md-12">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Наименование товара</th>
+                <th>Количество</th>
+                <th>Цена</th>
+            </tr>
+        </thead>
+        <tbody>
+END;
+        $line_template = <<<END
+            <tr>
+                <td>{line_number}</td>
+                <td><a href="{url}">{title}</a></td>
+                <td>{count}</td>
+                <td>{price}</td>
+            </tr>
+END;
+
+        foreach ( $basket as $item )
+        {
+            $result .= str_replace(
+                array(
+                    '{line_number}',
+                    '{url}',
+                    '{title}',
+                    '{count}',
+                    '{price}'
+                ),
+                array(
+                    $line_number,
+                    base_url() . 'products/product/' . $item['id_goods'],
+                    $item['title'],
+                    $item['cnt'],
+                    $item['cnt'] * $item['price']
+                ),
+                $line_template
+            );
+            $line_number++;
+            $total_price += $item['cnt'] * $item['price'];
+        }
+
+        $result .= '<tr><td colspan="3" align="right">Итого к оплате:</td><td>' . $total_price . '</td></tr>';
+
+        $result .= '</tbody></table></div>';
+    }
+
+    // иначе в корзине пусто
+    else
+    {
+        $result = 'В корзине пусто! Сорян!';
+    }
+
+    return $result;
+}
+
