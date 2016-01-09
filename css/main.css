@@ -159,3 +159,8 @@ body{
     text-decoration: none;
     color: #000;
 }
+
+.error{
+    color: #c7254e;
+    font-weight: bold;
+}

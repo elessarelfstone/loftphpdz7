@@ -2,6 +2,27 @@
 
 {% block content %}
     <div class="row">
+        <div class="col-md-10">
+            <form class="form-inline" method="get" action="{{ base_url }}admin/products/">
+                <div class="form-group">
+                    <label for="name" class="control-label">Категория</label>
+                    <select class="form-control" name="cat_title">
+                        {% for cat in cats %}
+                            <option value="{{ cat.id }}" {% if catid and cat.id == catid  %} selected {% endif %}>{{ cat.title }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="name" class="control-label">Брэнд</label>
+                    <select class="form-control" name="brand_title">
+                        {% for brand in brands %}
+                            <option value="{{ brand.id }}" {% if brandid and brand.id == brandid  %} selected {% endif %}>{{ brand.title }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-default">Применить</button>
+            </form>
+        </div>
         <div class="col-md-2 col-md-offset-10"><a href="{{ base_url }}admin/addprod">Добавить</a></div>
     </div>
     {% for product in products %}
@@ -14,4 +35,5 @@
             <div class="col-md-1"><a href="{{ base_url }}admin/deleteprod/{{ product.id }}"><span>Удалить</span></a></div>
         </div>
     {% endfor %}
+    <div class="row">{{ links | raw  }}</div>
 {% endblock %}

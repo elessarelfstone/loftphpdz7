@@ -25,14 +25,33 @@ class Products_Model extends LOFT_Model
     }
 
 
-    public function getAllProducts()
+    public function getAllProducts($page, $limit, $cat = NULL, $brand = NULL)
     {
         $this->db->select('goods.id, goods.title as product_title, goods.cnt, goods.price, goods.description, categoryes.title as cat_title, brand.title as brand_title');
         $this->db->from('goods');
         $this->db->join('categoryes', 'goods.id_category = categoryes.id');
         $this->db->join('brand', 'brand.id = goods.id_brand');
+        $this->db->limit($limit, $page);
+        if ($cat)
+            $this->db->where(array('categoryes.id' => $cat));
+        if ($brand)
+            $this->db->where(array('brand.id' => $brand));
         $result = $this->db->get();
         return $result->result_array();
+    }
+
+    public function getCntAllProducts($cat, $brand)
+    {
+        $this->db->select('goods.id, goods.title as product_title, goods.cnt, goods.price, goods.description, categoryes.title as cat_title, brand.title as brand_title');
+        $this->db->from('goods');
+        $this->db->join('categoryes', 'goods.id_category = categoryes.id');
+        $this->db->join('brand', 'brand.id = goods.id_brand');
+        if ($cat)
+            $this->db->where(array('categoryes.id' => $cat));
+        if ($brand)
+            $this->db->where(array('brand.id' => $brand));
+        $result = $this->db->get();
+        return count($result->result_array());
     }
 
     public function getProductById2($id)
@@ -41,7 +60,7 @@ class Products_Model extends LOFT_Model
         $this->db->from('goods');
         $this->db->join('categoryes', 'goods.id_category = categoryes.id');
         $this->db->join('brand', 'brand.id = goods.id_brand');
-        $this->db->where(array('goods.id'=>$id));
+        $this->db->where(array('goods.id' => $id));
         $result = $this->db->get();
         return $result->row_array();
     }
@@ -58,7 +77,7 @@ class Products_Model extends LOFT_Model
      */
     public function getProductById($id)
     {
-        $this->db->where(array('id'=>$id));
+        $this->db->where(array('id' => $id));
         $result = $this->db->get($this->table);
         return $result->row();
     }

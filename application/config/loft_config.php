@@ -46,6 +46,33 @@ $config['reg_validation'] = array(
         'rules'   => 'required'
     ),
 );
+$config['category'] = array(
+    array(
+        'field'   => 'name',
+        'label'   => 'Наименование категории',
+        'rules'   => 'required'
+    ),
+
+);
+$config['product'] = array(
+    array(
+        'field'   => 'name',
+        'label'   => 'Наименование товара',
+        'rules'   => 'required'
+    ),
+    array(
+        'field'   => 'price',
+        'label'   => 'Цена',
+        'rules'   => 'required|decimal'
+    ),
+    array(
+        'field'   => 'cnt',
+        'label'   => 'Количество',
+        'rules'   => 'required|is_natural'
+    ),
+);
+
+
 
 // email, с которого нужно отсылать письма
 $config['from_email'] = "dake2006@mail.ru";

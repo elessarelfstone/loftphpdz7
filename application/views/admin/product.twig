@@ -3,10 +3,13 @@
 {% block content %}
     <div>
         <form method="post" action="{{ base_url }}admin/{{ mode }}prod">
+            {% if error is defined %}
+                <p>{{ error|raw }}</p>
+            {% endif %}
             <div class="form-group">
                 <label for="name" class="control-label">Название товара</label>
                 <input type="text" class="form-control" id="name" name="name"
-                       value="{% if mode == 'edit' %}{{ product.product_title }}{% endif %}">
+                       value="{% if mode == 'edit' or error %}{{ product.product_title }}{% endif %}">
             </div>
             <div class="form-group">
                 <label for="name" class="control-label">Категория</label>
@@ -24,12 +27,17 @@
                     {% endfor %}
                 </select>
             </div>
-            <div class="form-group ">
+            <div class="form-group">
                 <label for="name" class="control-label">Цена</label>
                 <input type="text" class="form-control" id="name" name="price"
-                       value="{% if mode == 'edit' %}{{ product.price }}{% endif %}">
+                       value="{% if mode == 'edit' or error %}{{ product.price }}{% endif %}">
             </div>
-            <div class="form-group ">
+            <div class="form-group">
+                <label for="name" class="control-label">Количество</label>
+                <input type="text" class="form-control" id="name" name="cnt"
+                       value="{% if mode == 'edit' or error %}{{ product.cnt }}{% endif %}">
+            </div>
+            <div class="form-group">
                 <label for="descr" class="control-label">Описание</label>
                 <textarea name="descr" class="form-control">{% if mode == 'edit' %}{{ product.description }}{% endif %}</textarea>
             </div>
