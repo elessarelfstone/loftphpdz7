@@ -92,7 +92,6 @@ class User extends LOFT_Controller
             $items_cnt = $this->Cart_Model->getSum('cnt', array('id_user'=>$user_info['id']));
             $data['result']['status'] = 0;
             $data['result']['cnt'] = $items_cnt['cnt'];
-
         }
         else
         {
