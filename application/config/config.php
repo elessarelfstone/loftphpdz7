@@ -24,7 +24,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |
 | ЗДЕСЬ РЕБЯТА У ВАС У КАЖОГО СВОЁ ЗНАЧЕНИЕ!!
 */
+
 $config['base_url'] = 'http://loftphpdz7/';
+
 
 /*
 |--------------------------------------------------------------------------
