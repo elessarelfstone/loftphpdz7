@@ -1,0 +1,14 @@
+{% extends 'admin_main_template.twig' %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-2 col-md-offset-10"><a href="{{ base_url }}admin/addcat">Добавить</a></div>
+    </div>
+{% for category in categories %}
+    <div class="row">
+        <div class="col-md-8">{{ category.title }}</div>
+        <div class="col-md-2"><a href="{{ base_url }}admin/editcat/{{ category.id }}"><span>Изменить</span></a></div>
+        <div class="col-md-2"><a href="{{ base_url }}admin/deletecat/{{ category.id }}"><span>Удалить</span></a></div>
+    </div>
+{% endfor %}
+{% endblock %}
