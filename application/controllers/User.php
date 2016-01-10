@@ -85,6 +85,8 @@ class User extends LOFT_Controller
             $this->load->model('User_Model');
             $this->load->model('Cart_Model');
             $user_info = $this->User_Model->get(array('email'=>$this->session->userdata('login')));
+
+            //TODO: Даурен, Шторм указывает здесь на то, что переменная $item_id не используется. Баг?
             $item_id = $this->Cart_Model->addProduct($user_info['id'], $product_id);
 
             $items_cnt = $this->Cart_Model->getSum('cnt', array('id_user'=>$user_info['id']));
