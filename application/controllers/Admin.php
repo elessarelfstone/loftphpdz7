@@ -199,9 +199,9 @@ class Admin extends LOFT_Controller
     }
     public function deleteprod($id)
     {
-        $this->load->model('Categories_Model');
-        $this->Categories_Model->delete(array('id' => $id));
-        redirect('admin/categories');
+        $this->load->model('Products_Model');
+        $this->Products_Model->delete(array('id' => $id));
+        redirect('admin/products');
     }
 
 }
