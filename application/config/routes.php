@@ -51,6 +51,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 */
 
 $route['default_controller'] = 'main';
+$route['orders'] = 'orders/index';
 $route['payment'] = 'pages/payment';
 $route['user/login'] = 'user/login';
 $route['products/(:num)/(:num)'] = "products/index/$1/$2";
@@ -62,10 +63,7 @@ $route['admin/editcat/(:id)'] = "admin/editcat/$1";
 $route['admin/deletecat/(:id)'] = "admin/deletecat/$1";
 $route['admin/products'] = "admin/products";
 $route['admin/products/(:num)'] = "admin/products/$1";
-
 $route['admin/addprod'] = "admin/addprod";
 $route['admin/editprod/(:id)'] = "admin/editprod/$1";
-
-
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;

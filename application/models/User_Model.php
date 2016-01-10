@@ -27,6 +27,7 @@ class User_Model extends LOFT_Model
 
         return $result;
     }
+
     public function session_data($login)
     {
         $result = array();
@@ -37,5 +38,22 @@ class User_Model extends LOFT_Model
         return $result;
     }
 
+    /**
+     *
+     * Метод для получения ID пользователя
+     *
+     * @autor Paintcast
+     *
+     * @param $login
+     * @return mixed
+     */
 
+    public function getUserId($login)
+    {
+        $res = $this->get(array('email'=>$login));
+        $user_id = $res['id'];
+
+        return $user_id;
+
+    }
 }
