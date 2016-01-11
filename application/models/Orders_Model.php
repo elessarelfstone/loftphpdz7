@@ -13,17 +13,25 @@ class Orders_Model extends LOFT_Model
         return $result->result_array();
     }
 
-    // заготовка типа под процессинг))
+
+    /**
+     *
+     * Метод для процессинга нового заказа
+     *
+     * @param $id_user - ID пользователя
+     * @param $items - массив товаров из корзины
+     */
     function makeOrder($id_user, $items)
     {
         $this->db->trans_start();
-        $order_id = $this->db->insert(array('id_user'=>$id_user, 'id_status'=>1, 'date_order'=> date()));
-        $this->load->model('OrderItems_Model');
+        $this->db->insert('orders', array('id_user'=>$id_user, 'id_status'=>1, 'date_order'=> date(DATE_ATOM, time())));
+        $order_id = $this->db->insert_id();
         foreach ( $items as $item )
         {
-            $this->OrderItems_Model->insert(array('price'=>$item['price'], 'cnt'=>$item['cnt'], 'id_goods'=>$item['id_goods'], 'id_order'=>$order_id));
+            $this->db->insert('order_items', array('price'=>$item['price'], 'cnt'=>$item['cnt'], 'id_goods'=>$item['id_goods'], 'id_order'=>$order_id));
         }
         $this->db->trans_complete();
+        return $order_id;
     }
 
     /**
@@ -50,7 +58,7 @@ class Orders_Model extends LOFT_Model
 
     /**
      *
-     * Метод получения списка заказов по ID пользователя
+     * Метод получения списка товаров в заказе по его ID
      *
      * @author Paintcast
      *

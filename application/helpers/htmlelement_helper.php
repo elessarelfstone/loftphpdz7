@@ -141,9 +141,12 @@ END;
         // Шаблон корзины: конец
         $basket_end = <<<END
             <tr>
-                <td colspan="2"><a href="'. base_url() .'orders/clear" class="btn btn-primary btn-xs">Очистить корзину</a></td>
-                <td align="right">Итого к оплате:</td>
-                <td>{total_price}</td>
+                <td colspan="2">
+                    <a href="{href_delete}" class="btn btn-primary btn-xs">Очистить корзину</a>
+                    <a href="{href_new_order}" class="btn btn-primary btn-xs">Оформить заказ</a>
+                </td>
+                <td align="right" nowrap>Итого к оплате:</td>
+                <td colspan="2">{total_price}</td>
             </tr>
         </tbody>
     </table>
@@ -177,7 +180,11 @@ END;
             $total_price += $item['cnt'] * $item['price'];
         }
 
-        $basket_html .= str_replace('{total_price}', $total_price, $basket_end);
+        $basket_html .= str_replace(
+            array('{total_price}', '{href_delete}', '{href_new_order}'),
+            array($total_price, base_url() . 'orders/clear/', base_url() . 'orders/make/'),
+            $basket_end
+        );
     }
 
     // иначе в корзине пусто
@@ -276,6 +283,7 @@ function getHtmlForOrderView($order_content){
     {
         $order_content_html = '';
         $order_total_price = 0;
+
         // Шаблон отображения заказа: начало
         $order_content_head = <<<END
     <table class="table">
@@ -330,7 +338,7 @@ END;
             $order_total_price += $item['price'];
         }
 
-        $order_content_html .= str_replace('{total}',$order_total_price ,$order_content_end);
+        $order_content_html .= str_replace('{total}', $order_total_price, $order_content_end);
     }
     else
     {
@@ -342,3 +350,24 @@ END;
     return $result;
 }
 
+/**
+ *
+ * Генератор HTML-кода для страницы оформления заказа
+ *
+ * @author Paintcast
+ *
+ * @param $order_id - ID нового заказа
+ * @return mixed - HTML-код
+ */
+
+function getHtmlForOrderMake($order_id){
+    $html_template = <<<END
+<div>
+    <p>Заказ #{order_id} успешно офрмлен. <a href="{url}">Перейти</a> на страницу заказа.</p>
+</div>
+END;
+    $result = str_replace(array('{order_id}', '{url}'), array($order_id, base_url() . 'orders/view/' . $order_id), $html_template);
+
+    return $result;
+
+}

@@ -127,8 +127,53 @@ class Orders extends LOFT_Controller
         }
     }
 
-    public function make($id_user)
+    /**
+     * Метод для оформления заказа
+     */
+    public function make()
     {
+        // Если пользователь залогинен
+        if ($this->session->has_userdata('login'))
+        {
+            // Получаем ID пользователя по его login
+            $this->load->model('User_Model');
+            $user_login = $this->session->userdata('login');
+            $user_id = $this->User_Model->getUserId($user_login);
 
+            // Получаем содержимое корзины пользователя по его ID
+            $this->load->model('Cart_Model');
+            $basket = $this->Cart_Model->getBasket($user_id);
+
+            //Если коризина не пуста
+            if($basket)
+            {
+                // Выполняем оформление нового заказа
+                $this->load->model('Orders_Model');
+                $order_id = $this->Orders_Model->makeOrder($user_id, $basket);
+
+                // Очищаем корзину
+                $this->Cart_Model->clearBasket($user_id);
+
+                // Устанавливаем заголовок + хелпер для хтмл-кода страницы
+                $this->setToData('title', 'Заказ #' . $order_id . ' оформлен');
+                $this->load->helper('htmlelement');
+                $temp = getHtmlForOrderMake($order_id);
+                $this->setToData('content', $temp);
+            }
+            // корзине пуста, не оформляем заказ
+            else
+            {
+                $this->setToData('title', 'Невозможно оформить заказ!');
+                $this->setToData('content', 'Корзина пуста. Сорян!');
+            }
+
+            // Отображаем страницу
+            $this->display('orders/make');
+        }
+        // Если пользователь не залогинен
+        else
+        {
+            header('Location: ' . base_url() . 'orders');
+        }
     }
 }
