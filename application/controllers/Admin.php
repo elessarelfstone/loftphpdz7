@@ -204,4 +204,147 @@ class Admin extends LOFT_Controller
         redirect('admin/products');
     }
 
+    public function users($page=0, $limit=15, $is_active=null)
+    {
+        $this->load->model('User_Model');
+
+        // настройки для пагинации
+        $config = array();
+        $config["base_url"] = base_url() . "admin/users/";
+//        $config["total_rows"] = 100;
+        $config["per_page"] = $limit;
+        $config["uri_segment"] = 3;
+        $config['last_link'] = 'Последняя';
+        $config['first_link'] = 'Первая';
+        $config['reuse_query_string'] = TRUE;
+
+        $is_active = $this->input->get('is_active');
+
+        $is_active = ($is_active == 3) ? NULL : $is_active;
+
+
+        $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+        $users = $this->User_Model->getAllUsers($page, $limit, $is_active);
+        $config["total_rows"] = $this->User_Model->getCountAllUsers($is_active);
+
+        $this->load->library('pagination');
+        $this->pagination->initialize($config);
+        $links = $this->pagination->create_links();
+
+        $this->setToData('links', $links);
+
+        $this->setToData('users', $users);
+
+        $this->display('admin/users');
+    }
+
+    public function edituser($id = 0)
+    {
+        $this->load->model('User_Model');
+
+        $this->setToData('mode', 'edit');
+        $this->setToData('id', $id);
+
+        if (!($this->input->server('REQUEST_METHOD') == 'POST')) {
+            $user = $this->User_Model->getUserById($id);
+            $this->setToData('user', $user);
+            $this->display('admin/user');
+        }
+        else
+        {
+            $this->load->library('form_validation');
+            $this->form_validation->set_rules($this->config->item('edit_user'));
+            $name = $this->input->post('name');
+            $id = $this->input->post('id');
+            $lastname = $this->input->post('lastname');
+            $email = $this->input->post('email');
+            $is_active = $this->input->post('is_active');
+            $password = $this->input->post('password');
+            $birthday = $this->input->post('birthday');
+            if ($this->form_validation->run() == TRUE){
+
+$data = array(
+    'name'=>$name,
+    'lastname'=>$lastname,
+    'email'=>$email,
+    'birthday'=>$birthday,
+    'is_active'=>$is_active,
+    'last_update'=>date('Y-m-d H:i:s')
+);
+                if($password!='') {
+                    $data['password'] = password_hash($password, PASSWORD_DEFAULT);
+                }
+
+
+               $this->User_Model->update(array('id'=>$id), $data);
+
+
+
+
+                    redirect('admin/users');
+
+            }
+            else
+            {
+                $this->load->helper('form');
+                $this->setToData('error', validation_errors('<p class="error">', '</p>'));
+                $this->setToData('user', array('name'=>$name,
+                        'lastname'=>$lastname,
+                        'e-mail'=>$email,
+                        'is_active'=>$is_active
+                        )
+                );
+                $this->display('admin/user');
+            }
+        }
+    }
+
+    public function adduser()
+    {
+        $this->load->model('User_Model');
+        $this->setToData('mode', 'add');
+
+        if(!($this->input->server('REQUEST_METHOD') == 'POST')){
+            $this->display('admin/user');
+        }
+        else
+        {
+        $this->load->library('form_validation');
+            $this->form_validation->set_rules($this->config->item('reg_validation'));
+            $name = $this->input->post('name');
+            $lastname = $this->input->post('lastname');
+            $email = $this->input->post('email');
+            $password = $this->input->post('password');
+            $is_active = $this->input->post('is_active');
+            $reg_date = date('Y-m-d H:i:s');
+            if($this->form_validation->run() == TRUE)
+            {
+                $this->User_Model->insert(array('name'=>$name,'lastname'=>$lastname, 'email'=>$email, 'password'=>password_hash($password, PASSWORD_DEFAULT), 'is_active'=>$is_active, 'reg_date'=>$reg_date));
+
+                redirect('admin/users');
+            }
+            else
+            {
+                $this->load->helper('form');
+                $this->setToData('error', validation_errors('<p class="error">', '</p>'));
+                $this->setToData('user', array('name'=>$name,
+                        'lastname'=>$lastname,
+                        'email'=>$email,
+                        'password'=>$password
+                    )
+                );
+                $this->display('admin/user');
+            }
+        }
+    }
+
+    public function deleteuser($id)
+    {
+
+        $this->load->model('User_Model');
+        $this->User_Model->delete(array('id' => $id));
+        redirect('admin/users');
+    }
+
+
 }

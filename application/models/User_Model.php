@@ -56,4 +56,39 @@ class User_Model extends LOFT_Model
         return $user_id;
 
     }
+
+
+    public function getAllUsers($page, $limit, $is_active = NULL)
+    {
+        $this->db->select('users.id, users.`name`, users.lastname, users.email, users.is_active');
+        $this->db->from($this->table);
+        $this->db->limit($limit, $page);
+        if ($is_active)
+            $this->db->where(array('users.is_active' => $is_active));
+        $this->db->order_by('users.id DESC');
+        $result = $this->db->get();
+        return $result->result_array();
+    }
+
+    public function getUserById($id)
+    {
+        $this->db->select('users.id, users.`name`, users.lastname, users.email, users.is_active, users.birthday');
+        $this->db->from($this->table);
+        $this->db->where(array('id'=>$id));
+        $this->db->limit(0,0);
+        $result = $this->db->get();
+        return $result->result_array()[0];
+
+    }
+
+    public function getCountAllUsers($is_active = NULL)
+    {
+        $this->db->select('users.id, users.`name`, users.lastname, users.email');
+        $this->db->from('users');
+        if ($is_active)
+            $this->db->where(array('users.is_active' => $is_active));
+
+        $result = $this->db->get();
+        return count($result->result_array());
+    }
 }
