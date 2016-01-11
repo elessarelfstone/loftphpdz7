@@ -35,16 +35,18 @@ class Orders_Model extends LOFT_Model
      * @param $user_id - ID пользователя
      * @return mixed  - массив заказов
      */
+
     public function getOrders($user_id)
     {
         $this->db->select('orders.id, orders.date_order, status.title AS status');
-        //$this->db->join('users', 'orders.id_user = users.id.');
+        $this->db->select_sum('order_items.price');
         $this->db->join('status', 'orders.id_status = status.id');
+        $this->db->join('order_items', 'order_items.id_order = orders.id');
         $this->db->where(array('orders.id_user'=>$user_id));
+        $this->db->group_by('orders.id');
         $result = $this->db->get($this->table);
         return $result->result_array();
     }
-
 
 
 }

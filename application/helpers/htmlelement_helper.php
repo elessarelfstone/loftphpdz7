@@ -198,7 +198,7 @@ END;
             <tr>
                 <th>Дата заказа</th>
                 <th>Содержимое</th>
-                <th>Сумма</th>
+                <th>Сумма заказа</th>
                 <th>Статус</th>
             </tr>
         </thead>
@@ -209,7 +209,7 @@ END;
             <tr>
                 <td>{data_order}</td>
                 <td><a href="">Содержимое заказа #{id}</a></td>
-                <td>сумма</td>
+                <td>{price}</td>
                 <td>{status}</td>
             </tr>
 END;
@@ -227,12 +227,14 @@ END;
                 array(
                     '{data_order}',
                     '{id}',
+                    '{price}',
                     '{status}'
                 ),
                 array(
                     $item['date_order'],
                     $item['id'],
-                    $item['status'],
+                    $item['price'],
+                    $item['status']
                 ),
                 $orders_line
             );
@@ -248,7 +250,11 @@ END;
         $orders_html = 'Заказов нет. Сорян!';
     }
 
-    $result = str_replace(array('{basket}','{orders}'), array($basket_html, $orders_html), $tabs_template);
+    $result = str_replace(
+        array('{basket}','{orders}'),
+        array($basket_html, $orders_html),
+        $tabs_template
+    );
 
     return $result;
 }
