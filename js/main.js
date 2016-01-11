@@ -109,4 +109,10 @@ $(document).ready(function(){
         self.addMarker({'position': this.get('map').getCenter() });
     }
     });
+
+    // Orders tabs
+    $('#myTabs a').click(function (e) {
+      e.preventDefault()
+      $(this).tab('show')
+    })
 });

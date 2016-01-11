@@ -24,12 +24,16 @@ class Orders extends LOFT_Controller
             $this->load->model('Cart_Model');
             $basket = $this->Cart_Model->getBasket($user_id);
 
-            // Подгружаем хелпер, получаем HTML-код для отображения корзины
+            // Получаем заказы пользователя по его ID
+            $this->load->model('Orders_Model');
+            $orders = $this->Orders_Model->getOrders(28);
+
+            // Подгружаем хелпер, получаем HTML-код для отображения корзины / заказов
             $this->load->helper('htmlelement');
-            $temp = getHtmlForBasket($basket);
+            $temp = getHtmlForBasket($basket, $orders);
             $this->setToData('basket', $temp);
 
-            $this->setToData('title', 'Корзина');
+            // $this->setToData('title', 'Корзина');
         }
         // Если пользователь не залогинен
         else

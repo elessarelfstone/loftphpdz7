@@ -80,19 +80,42 @@ END;
  * @author Paintcast
  *
  * @param $basket – массив, содержимое корзины
+ * @param $orders - массив заказов
  * @return string - HTML-код
  *
  */
 
-function getHtmlForBasket($basket){
+function getHtmlForBasket($basket, $orders = null){
+
+    // главный шаблон с табами
+    $tabs_template = <<<END
+<div>
+
+  <!-- Nav tabs -->
+  <ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="active"><a href="#basket" aria-controls="home" role="tab" data-toggle="tab">Корзина</a></li>
+    <li role="presentation"><a href="#orders" aria-controls="profile" role="tab" data-toggle="tab">Заказы</a></li>
+  </ul>
+
+  <!-- Tab panes -->
+  <div class="tab-content">
+    <div role="tabpanel" class="tab-pane active" id="basket" style="margin-top: 20px;">{basket}</div>
+    <div role="tabpanel" class="tab-pane" id="orders" style="margin-top: 20px;">{orders}</div>
+  </div>
+
+</div>
+
+END;
 
     // если корзина не пуста
     if($basket)
     {
         $line_number = 1;
         $total_price = 0;
-        $result = <<<END
-<div class="col-md-12">
+        $basket_html = '';
+
+        // Шаблон корзины: начало
+        $basket_head = <<<END
     <table class="table">
         <thead>
             <tr>
@@ -105,7 +128,8 @@ function getHtmlForBasket($basket){
         </thead>
         <tbody>
 END;
-        $line_template = <<<END
+        // Шаблон корзины: строчка
+        $basket_line = <<<END
             <tr>
                 <td>{line_number}</td>
                 <td><a href="{url}">{title}</a></td>
@@ -114,10 +138,23 @@ END;
                 <td><a href="{href_delete}"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a></td>
             </tr>
 END;
+        // Шаблон корзины: конец
+        $basket_end = <<<END
+            <tr>
+                <td colspan="2"><a href="'. base_url() .'orders/clear" class="btn btn-primary btn-xs">Очистить корзину</a></td>
+                <td align="right">Итого к оплате:</td>
+                <td>{total_price}</td>
+            </tr>
+        </tbody>
+    </table>
+
+END;
+        // делаем корзину
+        $basket_html .= $basket_head;
 
         foreach ( $basket as $item )
         {
-            $result .= str_replace(
+            $basket_html .= str_replace(
                 array(
                     '{line_number}',
                     '{url}',
@@ -134,22 +171,84 @@ END;
                     $item['cnt'] * $item['price'],
                     base_url() . 'orders/clear/' . $item['id_goods']
                 ),
-                $line_template
+                $basket_line
             );
             $line_number++;
             $total_price += $item['cnt'] * $item['price'];
         }
 
-        $result .= '<tr><td colspan="2"><a href="'. base_url() .'orders/clear" class="btn btn-primary btn-xs">Очистить корзину</a></td><td align="right">Итого к оплате:</td><td>' . $total_price . '</td></tr>';
-
-        $result .= '</tbody></table></div>';
+        $basket_html .= str_replace('{total_price}', $total_price, $basket_end);
     }
 
     // иначе в корзине пусто
     else
     {
-        $result = 'В корзине пусто! Сорян!';
+        $basket_html = 'В корзине пусто! Сорян!';
     }
+
+    // если имеются заказы
+    if($orders)
+    {
+        $orders_html = '';
+
+        // Шаблон заказов: начало
+        $orders_head = <<<END
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Дата заказа</th>
+                <th>Содержимое</th>
+                <th>Сумма</th>
+                <th>Статус</th>
+            </tr>
+        </thead>
+        <tbody>
+END;
+        // Шаблон заказов: строчка
+        $orders_line = <<<END
+            <tr>
+                <td>{data_order}</td>
+                <td><a href="">Содержимое заказа #{id}</a></td>
+                <td>сумма</td>
+                <td>{status}</td>
+            </tr>
+END;
+        // Шаблон заказов: конец
+        $orders_end = <<<END
+        </tbody>
+    </table>
+END;
+        // делаем корзину
+        $orders_html .= $orders_head;
+
+        foreach ( $orders as $item )
+        {
+            $orders_html .= str_replace(
+                array(
+                    '{data_order}',
+                    '{id}',
+                    '{status}'
+                ),
+                array(
+                    $item['date_order'],
+                    $item['id'],
+                    $item['status'],
+                ),
+                $orders_line
+            );
+        }
+
+        $orders_html .= $orders_end;
+
+   }
+
+    // иначе заказов нет
+    else
+    {
+        $orders_html = 'Заказов нет. Сорян!';
+    }
+
+    $result = str_replace(array('{basket}','{orders}'), array($basket_html, $orders_html), $tabs_template);
 
     return $result;
 }

@@ -2,7 +2,7 @@
 
 class Orders_Model extends LOFT_Model
 {
-    protected $table = 'orders';
+    public $table = 'orders';
 
     function getAllOrders()
     {
@@ -25,5 +25,26 @@ class Orders_Model extends LOFT_Model
         }
         $this->db->trans_complete();
     }
+
+    /**
+     *
+     * Метод получения списка заказов по ID пользователя
+     *
+     * @author Paintcast
+     *
+     * @param $user_id - ID пользователя
+     * @return mixed  - массив заказов
+     */
+    public function getOrders($user_id)
+    {
+        $this->db->select('orders.id, orders.date_order, status.title AS status');
+        //$this->db->join('users', 'orders.id_user = users.id.');
+        $this->db->join('status', 'orders.id_status = status.id');
+        $this->db->where(array('orders.id_user'=>$user_id));
+        $result = $this->db->get($this->table);
+        return $result->result_array();
+    }
+
+
 
 }
