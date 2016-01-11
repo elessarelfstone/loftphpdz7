@@ -67,4 +67,26 @@ class Orders_Model extends LOFT_Model
         $result = $this->db->get();
         return $result->result_array();
     }
+
+    /**
+     *
+     * Метод проверяет принадлежность заказа с ID = $id_order пользователю c ID = $id_user
+     *
+     * @param $id_order - ID заказа
+     * @param $id_user - ID пользователя
+     * @return bool - true, если принадлежит, иначе false
+     */
+    public function checkUserOrder($id_order, $id_user){
+        $this->db->select('orders.id, orders.id_user');
+        $this->db->where(array('orders.id'=>$id_order,'orders.id_user'=>$id_user));
+        $result = $this->db->get($this->table)->num_rows();
+        if($result)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
 }

@@ -2,6 +2,7 @@
 /**
  *
  * Контроллер управления корзиной
+ *
  * @author Paintcast
  *
  */
@@ -46,7 +47,11 @@ class Orders extends LOFT_Controller
 
     /**
      * Метод для очистки содержимого корзины
+     *
+     * @param null $id_goods - если задано, то ID товара, который нужно удалить из корзины
+     *
      */
+
     public function clear($id_goods = null)
     {
         // Если пользователь залогинен
@@ -69,28 +74,61 @@ class Orders extends LOFT_Controller
         header('Location: ' . base_url() . 'orders');
     }
 
+    /**
+     * Метод для отображения содержимого заказа
+     *
+     * @param $id_order - ID заказа
+     *
+     * @return bool - false, если не передан ID заказа
+     */
+
     public function view($id_order = null)
     {
-        // Если пользователь залогинен
-        if ($this->session->has_userdata('login'))
+        // Если пользователь залогинен и есть ID заказа
+        if ($this->session->has_userdata('login') && $id_order)
         {
-            // Очищаем корзину
+            // Необходимо проверить есть ли доступ у текущего пользователя доступ к заказу с ID = $id_user
+            // Получаем login пользователя
+            $user_login = $this->session->userdata('login');
+
+            // Получаем ID пользователя по его login
+            $this->load->model('User_Model');
+            $id_user = $this->User_Model->getUserId($user_login);
+
+            // Проверяем принадлежность заказа в БД
             $this->load->model('Orders_Model');
-            $order_content = $this->Orders_Model->showOrderContent($id_order);
+            $flag = $this->Orders_Model->checkUserOrder($id_order, $id_user);
 
-            // Подгружаем хелпер, получаем HTML-код для отображения содержимого заказа
-            $this->load->helper('htmlelement');
-            $temp = getHtmlForOrderView($order_content);
-            $this->setToData('order_content', $temp);
+            if($flag){
+                // Заказ принадлежит пользователю, получаем содержимое заказа
+                $order_content = $this->Orders_Model->showOrderContent($id_order);
 
-            // Отображаем содержимое заказа
-            $this->setToData('title', 'Содержимое заказа #' . $id_order);
+                // Подгружаем хелпер, получаем HTML-код для отображения содержимого заказа
+                $this->load->helper('htmlelement');
+                $temp = getHtmlForOrderView($order_content);
+                $this->setToData('order_content', $temp);
+
+                // Устанавливаем заголовок
+                $this->setToData('title', 'Содержимое заказа #' . $id_order);
+            }
+            else
+            {
+                //заказ не принадлежит пользователю
+                $this->setToData('title', 'Содержимое заказа недоступно. Сорян!');
+            }
+
+            // Отображаем страницу
             $this->display('orders/view');
         }
-        // Если пользователь не залогинен
+        // Если пользователь не залогинен и нет ID заказа
         else
         {
             header('Location: ' . base_url() . 'orders');
         }
+    }
+
+    public function make($id_user)
+    {
+
     }
 }
