@@ -48,5 +48,23 @@ class Orders_Model extends LOFT_Model
         return $result->result_array();
     }
 
+    /**
+     *
+     * Метод получения списка заказов по ID пользователя
+     *
+     * @author Paintcast
+     *
+     * @param $id_order - ID заказа
+     * @return mixed - массив содержимого заказа
+     */
 
+    public function showOrderContent($id_order)
+    {
+        $this->db->select('order_items.price, order_items.cnt, order_items.id_goods, goods.title');
+        $this->db->from('order_items');
+        $this->db->join('goods', 'goods.id = order_items.id_goods');
+        $this->db->where(array('order_items.id_order'=>$id_order));
+        $result = $this->db->get();
+        return $result->result_array();
+    }
 }

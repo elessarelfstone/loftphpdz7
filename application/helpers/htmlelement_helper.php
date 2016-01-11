@@ -208,7 +208,7 @@ END;
         $orders_line = <<<END
             <tr>
                 <td>{data_order}</td>
-                <td><a href="">Содержимое заказа #{id}</a></td>
+                <td><a href="{url}{id}">Содержимое заказа #{id}</a></td>
                 <td>{price}</td>
                 <td>{status}</td>
             </tr>
@@ -218,7 +218,7 @@ END;
         </tbody>
     </table>
 END;
-        // делаем корзину
+        // делаем таблицу с заказами
         $orders_html .= $orders_head;
 
         foreach ( $orders as $item )
@@ -226,12 +226,14 @@ END;
             $orders_html .= str_replace(
                 array(
                     '{data_order}',
+                    '{url}',
                     '{id}',
                     '{price}',
                     '{status}'
                 ),
                 array(
                     $item['date_order'],
+                    base_url() . 'orders/view/',
                     $item['id'],
                     $item['price'],
                     $item['status']
@@ -255,6 +257,87 @@ END;
         array($basket_html, $orders_html),
         $tabs_template
     );
+
+    return $result;
+}
+
+/**
+ *
+ *  Генератор HTML-шаблона для отображения содержимого заказа
+ *
+ * @author Paintcast
+ *
+ * @param $order_content - массив с содержимым заказа
+ * @return string = html-код
+ */
+
+function getHtmlForOrderView($order_content){
+    if($order_content)
+    {
+        $order_content_html = '';
+        $order_total_price = 0;
+        // Шаблон отображения заказа: начало
+        $order_content_head = <<<END
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Название товара</th>
+                <th>Количество</th>
+                <th>Цена</th>
+            </tr>
+        </thead>
+        <tbody>
+END;
+        // Шаблон отображения заказа: строчка
+        $order_content_line = <<<END
+            <tr>
+                <td>{id}</td>
+                <td>{title}</td>
+                <td>{cnt}</td>
+                <td>{price}</td>
+            </tr>
+END;
+        // Шаблон заказов: конец
+        $order_content_end = <<<END
+            <tr>
+                <td colspan = "3" align="right">Итого: </td>
+                <td>{total}</td>
+            </tr>
+        </tbody>
+    </table>
+END;
+        // делаем таблицу с содержимым заказа
+        $order_content_html .= $order_content_head;
+
+        foreach ( $order_content as $item )
+        {
+            $order_content_html .= str_replace(
+                array(
+                    '{id}',
+                    '{title}',
+                    '{cnt}',
+                    '{price}'
+                ),
+                array(
+                    $item['id_goods'],
+                    $item['title'],
+                    $item['cnt'],
+                    $item['price']
+                ),
+                $order_content_line
+            );
+            $order_total_price += $item['price'];
+        }
+
+        $order_content_html .= str_replace('{total}',$order_total_price ,$order_content_end);
+    }
+    else
+    {
+        $order_content_html = 'Заказ пуст. Сорян!';
+    }
+
+    $result = $order_content_html;
 
     return $result;
 }

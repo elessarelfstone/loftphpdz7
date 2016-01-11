@@ -26,7 +26,7 @@ class Orders extends LOFT_Controller
 
             // Получаем заказы пользователя по его ID
             $this->load->model('Orders_Model');
-            $orders = $this->Orders_Model->getOrders(28);
+            $orders = $this->Orders_Model->getOrders($user_id);
 
             // Подгружаем хелпер, получаем HTML-код для отображения корзины / заказов
             $this->load->helper('htmlelement');
@@ -67,5 +67,30 @@ class Orders extends LOFT_Controller
         }
 
         header('Location: ' . base_url() . 'orders');
+    }
+
+    public function view($id_order = null)
+    {
+        // Если пользователь залогинен
+        if ($this->session->has_userdata('login'))
+        {
+            // Очищаем корзину
+            $this->load->model('Orders_Model');
+            $order_content = $this->Orders_Model->showOrderContent($id_order);
+
+            // Подгружаем хелпер, получаем HTML-код для отображения содержимого заказа
+            $this->load->helper('htmlelement');
+            $temp = getHtmlForOrderView($order_content);
+            $this->setToData('order_content', $temp);
+
+            // Отображаем содержимое заказа
+            $this->setToData('title', 'Содержимое заказа #' . $id_order);
+            $this->display('orders/view');
+        }
+        // Если пользователь не залогинен
+        else
+        {
+            header('Location: ' . base_url() . 'orders');
+        }
     }
 }
