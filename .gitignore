@@ -12,11 +12,6 @@ application/logs/*
 /bower/
 /CI-PHPStorm-Code-Completion-master/
 
-/application/config/config.php
-/application/config/database.php
-/js/main.js
-
-
 # IDE Files
 #-------------------------
 /nbproject/
