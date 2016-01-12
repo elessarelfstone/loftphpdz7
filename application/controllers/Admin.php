@@ -224,4 +224,42 @@ class Admin extends LOFT_Controller
         $this->display('admin/orders');
     }
 
+    /**
+     *
+     * Метод отображения содержимого заказа
+     *
+     * @author Paintcast
+     *
+     * @param null $id_order - ID заказа
+     *
+     */
+    public function viewOrder($id_order = null)
+    {
+        if($id_order)
+        {
+            // подключаем модель + делаем запрос в БД
+            $this->load->model('Orders_Model');
+            $order_content = $this->Orders_Model->showOrderContent($id_order);
+            $this->setToData('order_content', $order_content);
+            $this->setToData('title', 'Содержимое заказа #'.$id_order);
+
+            // считаем итоговую сумму по заказу
+            $total_price = 0;
+
+            foreach($order_content as $item )
+            {
+                $total_price += $item['price'];
+            }
+
+            // пушим итоговую сумму в шаблон
+            $this->setToData('total_price', $total_price);
+
+            // отображеем страницу
+            $this->display('admin/vieworder');
+        }
+        else
+        {
+            header('Location: ' . base_url() . 'admin/orders');
+        }
+    }
 }
