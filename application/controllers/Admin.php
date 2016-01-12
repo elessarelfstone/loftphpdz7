@@ -204,4 +204,24 @@ class Admin extends LOFT_Controller
         redirect('admin/products');
     }
 
+    /**
+     *
+     * Метод для отображения списка заказов в админке
+     *
+     * @author Paintcast
+     *
+     */
+    public function orders()
+    {
+        // подключаем модель
+        $this->load->model('Orders_Model');
+
+        // делаем запрос в БД
+        $orders = $this->Orders_Model->getAllOrders('orders.date_order DESC');
+        $this->setToData('orders', $orders);
+
+        // отображеем страницу
+        $this->display('admin/orders');
+    }
+
 }

@@ -4,11 +4,19 @@ class Orders_Model extends LOFT_Model
 {
     public $table = 'orders';
 
-    function getAllOrders()
+    // from Paintcast: я тут чуток допилил метод, чтобы не создавать ещё один :)
+    function getAllOrders($order_by = null)
     {
-        $this->db->select('orders.id, orders.id_user, orders.id_status, orders.date_order, users.name uname, users.lastname');
+        $this->db->select('orders.id, orders.id_user, orders.id_status, orders.date_order, users.name uname, users.lastname, status.title');
         $this->db->from('orders');
-        $this->db->join('users', 'orders.id_user = users.id.');
+        $this->db->join('users', 'orders.id_user = users.id');
+        $this->db->join('status', 'orders.id_status = status.id');
+
+        if($order_by)
+        {
+            $this->db->order_by($order_by);
+        }
+
         $result = $this->db->get();
         return $result->result_array();
     }

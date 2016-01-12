@@ -1,0 +1,14 @@
+{% extends 'admin_main_template.twig' %}
+
+{% block content %}
+{% for order in orders %}
+    <div class="row">
+        <div class="col-md-2">{{ order.date_order }}</div>
+        <div class="col-md-1">#{{ order.id }}</div>
+        <div class="col-md-4"><a href="{{ base_url }}admin/view-order/{{ order.id }}"><span>Заказ #{{ order.id }}</span></a></div>
+        <div class="col-md-2">{{ order.uname }} {{ order.lastname }}</div>
+        <div class="col-md-2">{{ order.title }}</div>
+        <div class="col-md-1"><a href="{{ base_url }}admin/edit-order/{{ order.id }}"><span class="glyphicon glyphicon-cog" aria-hidden="true"></span></a></div>
+    </div>
+{% endfor %}
+{% endblock %}
