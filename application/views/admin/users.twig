@@ -1,0 +1,32 @@
+{% extends 'admin_main_template.twig' %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8"></div>
+    <div class="col-md-4"><a href="{{base_url}}admin/adduser">Добавить</a></div>
+
+</div>
+    <br />
+  <div class="row head_table">
+        <div class="col-md-1"><span>ID</span></div>
+        <div class="col-md-1"><span>Имя</span></div>
+        <div class="col-md-2"><span>Фамилия</span></div>
+        <div class="col-md-4"><span>Email</span></div>
+        <div class="col-md-2"><span>Действия</span></div>
+
+    </div>
+{%  for user in users %}
+
+    <div class="row {% if user.is_active==2 %}admin{% elseif  user.is_active==0%}new_user{% endif %} line">
+        <div class="col-md-1"><span>{{user.id}}</span></div>
+        <div class="col-md-1"><span>{{user.name}}</span></div>
+        <div class="col-md-2"><span>{{user.lastname}}</span></div>
+        <div class="col-md-3"><span>{{user.email}}</span></div>
+        <div class="col-md-1"><a href="{{ base_url }}admin/edituser/{{ user.id }}"><span>Изменить</span></a></div>
+        <div class="col-md-1"><a href="{{ base_url }}admin/deleteuser/{{ user.id }}"><span>Удалить</span></a></div>
+    </div>
+    </a>
+    {% endfor %}
+
+    <div class="row">{{ links | raw  }}</div>
+{% endblock %}

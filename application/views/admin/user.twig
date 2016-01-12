@@ -1,0 +1,57 @@
+{% extends 'admin_main_template.twig' %}
+
+{% block content %}
+
+    <div>
+        <form method="post" action="{{ base_url }}admin/{{ mode }}user{% if mode=='edit'%}/{{id}}{% endif %}">
+            {% if error is defined %}
+                <p>{{ error|raw }}</p>
+            {% endif %}
+            <div class="form-group">
+                <label for="name" class="control-label">Имя</label>
+                <input type="text" class="form-control" id="name" name="name"
+                       value="{% if mode == 'edit' or mode=='add' or error %}{{ user.name }}{% endif %}">
+            </div>
+            <div class="form-group">
+                <label for="lastname" class="control-label">Фамилия</label>
+                <input type="text" class="form-control" id="lastname" name="lastname"
+                       value="{% if mode == 'edit' or mode=='add' or error %}{{ user.lastname }}{% endif %}">
+            </div>
+            <div class="form-group">
+                <label for="birthday" class="control-label">Дата рождения (YYYY-MM-DD)</label>
+                <input type="date" class="form-control" id="birthday" name="birthday"
+                       value="{% if mode == 'edit' or mode=='add' or error %}{{ user.birthday }}{% endif %}">
+            </div>
+            <div class="form-group">
+                <label for="email" class="control-label">E-mail</label>
+                <input type="email" class="form-control" id="email" name="email"
+                       value="{% if mode == 'edit' or mode=='add' or error %}{{ user.email }}{% endif %}">
+            </div>
+
+            <div class="form-group">
+                <label for="password" class="control-label">{% if mode=='edit' %}Новый пароль{% elseif mode=='add' %} Пароль{% endif %}</label>
+                <input type="password" class="form-control" id="password" name="password"
+                       value="{% if mode == 'edit' or mode=='add' or error %}{{ user.password }}{% endif %}">
+            </div>
+            <div class="hidden">
+                <input type="password">         {# избавляемся от автоматической вставки сохраненного браузером пароля#}
+            </div>
+            <div class="form-group">
+                <label for="is_active" class="control-label">Статус</label>
+                <select name="is_active" id="is_active" class="form-control">
+                    <option value="0" {% if mode=='edit' or mode=='add' or error %}{% if user.is_active == 0%}selected{% endif %}{% endif %}>Не активирован</option>
+                    <option value="1" {% if mode=='edit' or mode=='add' or error %}{% if user.is_active == 1%}selected{% endif %}{% endif %}>Пользователь</option>
+                    <option value="2" {% if mode=='edit' or mode=='add' or error %}{% if user.is_active == 2%}selected{% endif %}{% endif %}>Админ</option>
+                </select>
+
+            </div>
+
+            <input id="mode" name="mode" type="hidden" value="{{ mode }}">
+            {% if mode == 'edit' %}<input type="hidden" name="id" value="{{user.id}}">{% endif %}
+            <div class="modal-footer"><input class="btn btn-primary" type="submit"
+                                             value="{% if mode == 'edit' %} Изменить{% elseif mode == 'add' %} Добавить {% endif %}">
+            </div>
+        </form>
+    </div>
+
+{% endblock %}

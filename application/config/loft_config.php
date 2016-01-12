@@ -72,6 +72,23 @@ $config['product'] = array(
     ),
 );
 
+$config['edit_user'] = array(
+    array(
+        'field'   => 'email',
+        'label'   => 'Ваш EMAIL',
+        'rules'   => 'required|valid_email'
+    ),
+    array(
+        'field'   => 'name',
+        'label'   => 'Ваше Имя',
+        'rules'   => 'required'
+    ),
+    array(
+        'field'   => 'lastname',
+        'label'   => 'Ваша фамилия',
+        'rules'   => 'required'
+    )
+);
 
 
 // email, с которого нужно отсылать письма
