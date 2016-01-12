@@ -262,4 +262,74 @@ class Admin extends LOFT_Controller
             header('Location: ' . base_url() . 'admin/orders');
         }
     }
+
+    /**
+     *
+     * Метод редактирования статуса заказа
+     *
+     * @author Paintcast
+     *
+     * @param null $id_order - ID заказа
+     *
+     */
+    public function editOrder($id_order = null)
+    {
+        if($id_order)
+        {
+            // подключаем модель + делаем запрос в БД
+            $this->load->model('Orders_Model');
+            $order_status = $this->Orders_Model->getOrderStatus($id_order);
+            $all_status = $this->Orders_Model->getAllStatus();
+
+            $this->setToData('order_status', $order_status);
+            $this->setToData('all_status', $all_status);
+            $this->setToData('id_order', $id_order);
+
+            $this->setToData('title', 'Редактирование статуса заказа #'.$id_order);
+
+            // отображеем страницу
+            $this->display('admin/editorder');
+        }
+        else
+        {
+            header('Location: ' . base_url() . 'admin/orders');
+        }
+    }
+
+
+    /**
+     * Метод изменения статуса заказа
+     *
+     * @author Paintcast
+     *
+     */
+    public function editstatus()
+    {
+        $new_status = $this->input->post('new_status');
+        $id_order = $this->input->post('id_order');
+
+        if($new_status && $id_order)
+        {
+            // подключаем модель + делаем запрос в БД
+            $this->load->model('Orders_Model');
+            $result = $this->Orders_Model->chageStatus($id_order, $new_status);
+
+            // анализируем результат запроса в БД
+            if($result)
+            {
+                $this->setToData('title', 'Cтатуса заказа #'.$id_order.' был изменён успешно.');
+            }
+            else
+            {
+                $this->setToData('title', 'Cтатуса заказа #'.$id_order.' не был изменён. Сорян');
+            }
+
+            // отображеем страницу
+            $this->display('admin/editstatus');
+        }
+        else
+        {
+            header('Location: ' . base_url() . 'admin/orders');
+        }
+    }
 }
