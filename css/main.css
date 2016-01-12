@@ -164,3 +164,19 @@ body{
     color: #c7254e;
     font-weight: bold;
 }
+
+.admin {
+    background: #c0ffbc
+}
+
+.new_user {
+    background: #ffd9d2
+}
+.row .row:hover {
+    background: #e8f1e8;
+}
+.head_table, .row .head_table:hover {
+    background: #c2c6b2;
+}
+a .row {color: #445379
+}
