@@ -7,12 +7,12 @@ application/cache/*
 application/logs/*
 !application/logs/index.html
 !application/logs/.htaccess
-.gitignore
-application/config/config.php
-application/config/database.php
-js/main.js
-vendor/
-bower/
+/.gitignore
+/application/config/config.php
+/application/config/database.php
+/js/main.js
+/vendor/
+/bower/
 CI-PHPStorm-Code-Completion-master/
 
 # IDE Files
