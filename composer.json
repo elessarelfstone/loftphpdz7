@@ -13,7 +13,8 @@
 	"require": {
 		"php": ">=5.2.4",
 		"twig/twig": "^1.23",
-		"phpmailer/phpmailer": "5.4.x-dev"
+		"phpmailer/phpmailer": "5.4.x-dev",
+		"keboola/csv": "^1.1"
 	},
 	"require-dev": {
 		"mikey179/vfsStream": "1.1.*"

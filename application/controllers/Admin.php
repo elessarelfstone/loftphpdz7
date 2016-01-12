@@ -1,5 +1,9 @@
 <?php
 
+use Goodby\CSV\Import\Standard\Interpreter;
+use Goodby\CSV\Import\Standard\Lexer;
+use Goodby\CSV\Import\Standard\LexerConfig;
+
 class Admin extends LOFT_Controller
 {
     public function categories()
@@ -7,7 +11,8 @@ class Admin extends LOFT_Controller
         $this->load->model('Categories_Model');
         $categories = $this->Categories_Model->getAll();
         $this->setToData('categories', $categories);
-        $this->display('admin/categories');}
+        $this->display('admin/categories');
+    }
 
     public function addcat()
     {
@@ -31,13 +36,11 @@ class Admin extends LOFT_Controller
             $this->setToData('mode', 'edit');
             $this->setVarsToData($cat_info);
             $this->display('admin/cat');
-        }
-        else
-        {
+        } else {
             $this->load->model('Categories_Model');
             $title = $this->input->post('name');
             $id = $this->input->post('id');
-            $this->Categories_Model->update(array('id'=>$id), array('title' => $title));
+            $this->Categories_Model->update(array('id' => $id), array('title' => $title));
             redirect('admin/categories');
         }
 
@@ -57,12 +60,11 @@ class Admin extends LOFT_Controller
         $this->load->model('Brand_Model');
         $cats = $this->Categories_Model->getAll();
         $brands = $this->Brand_Model->getAll();
-        array_unshift($cats, array('id'=>0, 'title'=>'Все'));
-        array_unshift($brands, array('id'=>0, 'title'=>'Все'));
+        array_unshift($cats, array('id' => 0, 'title' => 'Все'));
+        array_unshift($brands, array('id' => 0, 'title' => 'Все'));
         $this->setToData('cats', $cats);
         $this->setToData('brands', $brands);
         $this->load->model('Products_Model');
-
 
 
         // настройки для пагинации
@@ -75,7 +77,7 @@ class Admin extends LOFT_Controller
         $config['first_link'] = 'Первая';
         $config['reuse_query_string'] = TRUE;
 
-        $cat  = $this->input->get('cat_title');
+        $cat = $this->input->get('cat_title');
         $brand = $this->input->get('brand_title');
 
         $cat = ($cat == 0) ? NULL : $cat;
@@ -110,9 +112,7 @@ class Admin extends LOFT_Controller
         $this->setToData('mode', 'add');
         if (!($this->input->server('REQUEST_METHOD') == 'POST')) {
             $this->display('admin/product');
-        }
-        else
-        {
+        } else {
             $this->load->library('form_validation');
             $this->form_validation->set_rules($this->config->item('product'));
             $name = $this->input->post('name');
@@ -131,22 +131,22 @@ class Admin extends LOFT_Controller
                     'cnt' => $cnt
                 ));
                 redirect('admin/products');
-            }
-            else {
+            } else {
                 $this->load->helper('form');
                 $this->setToData('error', validation_errors('<p class="error">', '</p>'));
-                $this->setToData('product', array('product_title'=>$name,
-                                                  'brand_id'=>$brand,
-                                                  'category_id'=>$cat,
-                                                  'price'=>$price,
-                                                  'description'=>$descr,
-                                                  'cnt'=>$cnt)
-                                                    );
+                $this->setToData('product', array('product_title' => $name,
+                        'brand_id' => $brand,
+                        'category_id' => $cat,
+                        'price' => $price,
+                        'description' => $descr,
+                        'cnt' => $cnt)
+                );
 
                 $this->display('admin/product');
             }
         }
     }
+
     public function editprod($id = 0)
     {
         $this->load->model('Categories_Model');
@@ -162,9 +162,7 @@ class Admin extends LOFT_Controller
             $product = $this->Products_Model->getProductById2($id);
             $this->setToData('product', $product);
             $this->display('admin/product');
-        }
-        else
-        {
+        } else {
             $this->load->library('form_validation');
             $this->form_validation->set_rules($this->config->item('product'));
             $name = $this->input->post('name');
@@ -174,34 +172,68 @@ class Admin extends LOFT_Controller
             $descr = $this->input->post('descr');
             $cnt = $this->input->post('cnt');
             $id = $this->input->post('id');
-            if ($this->form_validation->run() == TRUE){
-                $this->Products_Model->update(array('id'=>$id),  array('title'=>$name,
-                    'id_category'=>$cat,
-                    'id_brand'=>$brand,
-                    'price'=>$price,
-                    'description'=>$descr, 'cnt'=>$cnt));
+            if ($this->form_validation->run() == TRUE) {
+                $this->Products_Model->update(array('id' => $id), array('title' => $name,
+                    'id_category' => $cat,
+                    'id_brand' => $brand,
+                    'price' => $price,
+                    'description' => $descr, 'cnt' => $cnt));
                 redirect('admin/products');
-            }
-            else
-            {
+            } else {
                 $this->load->helper('form');
                 $this->setToData('error', validation_errors('<p class="error">', '</p>'));
-                $this->setToData('product', array('product_title'=>$name,
-                        'brand_id'=>$brand,
-                        'category_id'=>$cat,
-                        'price'=>$price,
-                        'description'=>$descr,
-                        'cnt'=>$cnt)
+                $this->setToData('product', array('product_title' => $name,
+                        'brand_id' => $brand,
+                        'category_id' => $cat,
+                        'price' => $price,
+                        'description' => $descr,
+                        'cnt' => $cnt)
                 );
                 $this->display('admin/product');
             }
         }
     }
+
     public function deleteprod($id)
     {
         $this->load->model('Products_Model');
         $this->Products_Model->delete(array('id' => $id));
         redirect('admin/products');
     }
+
+    public function upload()
+    {
+        $this->display('admin/upload');
+    }
+
+    public function do_upload()
+    {
+            $this->load->helper('form');
+            $config['upload_path'] = './uploads/';
+            $config['allowed_types'] = 'csv';
+            $config['max_size'] = 2048;
+            $this->load->library('upload');
+            $this->upload->initialize($config);
+            if (!$this->upload->do_upload('userfile')) {
+                $error = $this->upload->display_errors('<p>', '</p>');
+                $this->setToData('error',$error);
+                $this->display('admin/upload');
+            }
+            else{
+                $this->load->model('Products_Model');
+                $csvFile = new Keboola\Csv\CsvFile($this->upload->data('full_path'));
+                foreach($csvFile as $row) {
+                    $this->Products_Model->insert(array('title'=>$row[0],
+                        'cnt'=>$row[1],
+                        'price'=>$row[2],
+                        'description'=>$row[3],
+                        'id_category'=>$row[4],
+                        'id_brand'=>$row[5]
+                        ));
+                }
+                redirect('admin/products');
+            }
+    }
+
 
 }

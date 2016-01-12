@@ -1,0 +1,20 @@
+{% extends 'admin_main_template.twig' %}
+
+{% block content %}
+    <div>
+        <form method="post" action="{{ base_url }}admin/do_upload" enctype="multipart/form-data">
+            {% if error is defined %}
+                <p>{{ error | raw }}</p>
+            {% endif %}
+            <div class="form-group">
+                <label for="exampleInputFile">Файл для импорта</label>
+                <input type="file" id="exampleInputFile" name="userfile">
+                <p class="help-block">Выберите CSV-файл для импорта</p>
+            </div>
+            <div class="modal-footer"><input class="btn btn-primary" type="submit"
+                                             value="Загрузить">
+            </div>
+        </form>
+    </div>
+
+{% endblock %}

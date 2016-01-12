@@ -65,5 +65,6 @@ $route['admin/products'] = "admin/products";
 $route['admin/products/(:num)'] = "admin/products/$1";
 $route['admin/addprod'] = "admin/addprod";
 $route['admin/editprod/(:id)'] = "admin/editprod/$1";
+$route['admin/upload'] = "admin/upload";
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
