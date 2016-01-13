@@ -20,10 +20,14 @@ class Search_model extends LOFT_Model
      * @return mixed - массив найдекных товаров
      *
      */
-    public function getProductsFromSearch($array)
+    public function getProductsFromSearch($array = array())
     {
-        $this->db->where(array('id_category'=>$array["category"], 'id_brand'=>$array["brand"], 'price>='=>$array["minprice"], 'price<='=>$array["maxprice"]));
-        $result = $this->db->get('goods');
+        $this->db->where(array('price>='=>$array["minprice"], 'price<='=>$array["maxprice"]));
+        if($array['category']!=0)
+            $this->db->where(array('id_category'=>$array["category"]));
+        if($array['brand']!=0)
+            $this->db->where(array('id_brand'=>$array["brand"]));
+            $result = $this->db->get('goods');
         return $result->result_array();
     }
 
