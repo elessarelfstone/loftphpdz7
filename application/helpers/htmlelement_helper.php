@@ -27,54 +27,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 /**
  *
- * Генератор HTML-шаблона для отображения информации о товаре
- *
- * @author Paintcast
- *
- * @param $product_info – массив с данными о товаре
- * @return string - HTML-код
- */
-function getHtmlForProduct($product_info){
-    // HTML-шаблон разметки информации о товаре
-    $template = <<<END
-<div class="col-md-12">
-    <p>Title: :title</p>
-    <p>Category: :category</p>
-    <p>Brand: :brand</p>
-    <p>Price: :price</p>
-    <p>Description: :description</p>
-    <p><a href=":base_url:user/add/:product_id" class="addProduct btn btn-primary btn-xs">В корзину</a></p>
-</div>
-END;
-
-    // Заполняем шаблон данными
-    $result = str_replace(
-        array(
-            ':title',
-            ':category',
-            ':brand',
-            ':price',
-            ':description',
-            ':product_id',
-            ':base_url:'
-        ),
-        array(
-            $product_info->title,
-            $product_info->category,
-            $product_info->brand,
-            $product_info->price,
-            $product_info->description,
-            $product_info->id,
-            base_url()
-        ),
-        $template
-    );
-
-    return $result;
-}
-
-/**
- *
  * Генератор HTML-шаблона корзины
  *
  * @author Paintcast
