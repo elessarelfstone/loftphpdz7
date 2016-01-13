@@ -65,10 +65,6 @@ class Products_Model extends LOFT_Model
         return $result->row_array();
     }
 
-
-//    TODO: в getProductByID дописать джоин id_category, id_brand
-
-
     /**
      *
      * Метод получения информации из БД по товару с ID = $id
