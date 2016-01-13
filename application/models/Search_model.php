@@ -20,15 +20,41 @@ class Search_model extends LOFT_Model
      * @return mixed - массив найдекных товаров
      *
      */
-    public function getProductsFromSearch($array = array())
+    public function getProductsFromSearch($array, $limit, $page)
     {
         $this->db->where(array('price>='=>$array["minprice"], 'price<='=>$array["maxprice"]));
+        if ($array["query"]!='') {
+            $this->db->like('title', $array["query"]);
+            $this->db->like('description', $array["query"]);
+        }
+
         if($array['category']!=0)
             $this->db->where(array('id_category'=>$array["category"]));
         if($array['brand']!=0)
             $this->db->where(array('id_brand'=>$array["brand"]));
+
+
+        $this->db->limit($limit, $page);
+
             $result = $this->db->get('goods');
+
         return $result->result_array();
+    }
+
+    public function getCountProductsFromSearch($array)
+    {
+        $this->db->where(array('price>='=>$array["minprice"], 'price<='=>$array["maxprice"]));
+        if ($array["query"]!='') {
+            $this->db->like('title', $array["query"]);
+            $this->db->like('description', $array["query"]);
+        }
+
+        if($array['category']!=0)
+            $this->db->where(array('id_category'=>$array["category"]));
+        if($array['brand']!=0)
+            $this->db->where(array('id_brand'=>$array["brand"]));
+        $result = $this->db->get('goods');
+        return count($result->result_array());
     }
 
 

@@ -249,7 +249,7 @@ class Admin extends LOFT_Controller
         $is_active = ($is_active == 3) ? NULL : $is_active;
 
 
-        $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+        $page = ($this->uri->segment(2)) ? $this->uri->segment(2) : 0;
         $users = $this->User_Model->getAllUsers($page, $limit, $is_active);
         $config["total_rows"] = $this->User_Model->getCountAllUsers($is_active);
 
@@ -371,7 +371,7 @@ $data = array(
     {
         $this->load->library('session');
 
-        if(($this->input->server('REQUEST_METHOD') == 'POST')){
+        if(($this->input->server('REQUEST_METHOD') == 'POST')) {
             $whom = $this->input->post('is_active');
             $subject = $this->input->post('subject');
             $message = $this->input->post('message');
@@ -382,19 +382,17 @@ $data = array(
             // включаем библиотеку для отправки писем
             $this->load->library('email');
 
-
-            foreach ($emails as $email)
-            {
-                $this->email->from($this->config->item('from_email'), 'Интернет каталог');
-                $this->email->to($email['email'], 'Пользователю сайта');
-                $this->email->subject($subject);
-                $this->email->message($message);
-                $this->email->send();
+            if ($emails) {
+                foreach ($emails as $email) {
+                    $this->email->from($this->config->item('from_email'), 'Интернет каталог');
+                    $this->email->to($email['email'], 'Пользователю сайта');
+                    $this->email->subject($subject);
+                    $this->email->message($message);
+                    $this->email->send();
+                }
+                $this->session->set_flashdata('success_send', true);
+                redirect('admin/sendmails');
             }
-            $this->session->set_flashdata('success_send', true);
-            redirect('admin/sendmails');
-
-
         }
         if($this->session->flashdata('success_send')) {
 
