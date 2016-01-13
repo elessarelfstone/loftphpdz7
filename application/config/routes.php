@@ -57,6 +57,7 @@ $route['user/login'] = 'user/login';
 $route['products/(:num)/(:num)'] = "products/index/$1/$2";
 $route['products/(:num)'] = "products/index/$1";
 $route['search'] = "search";
+$route['search/(:num)'] = "search/index/$1";
 $route['user/add/(:num)'] = "user/add/$1";
 $route['admin'] = "admin/categories";
 $route['admin/addcat'] = "admin/addcat";

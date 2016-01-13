@@ -76,8 +76,9 @@ class User_Model extends LOFT_Model
         $this->db->from($this->table);
         if($is_active == 0 | $is_active==1 |$is_active==2)
             $this->db->where(array('users.is_active'=>$is_active));
-        elseif($is_active == 3) {}
-        else return FALSE;
+        elseif($is_active != 3) {
+        return FALSE;}
+
         $result = $this->db->get();
         return $result->result_array();
     }
