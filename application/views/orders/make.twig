@@ -1,0 +1,13 @@
+{% extends 'main_template.twig' %}
+
+{% block header %}
+    <h3>  {{ title }} </h3>
+{% endblock %}
+
+{% block content %}
+    {% if content %}
+        {{ content | raw }}
+        {% else %}
+        <p>Заказ #{{ order_id }} успешно офрмлен. <a href="{{ base_url }}orders/view/{{ order_id }}">Перейти</a> на страницу заказа.</p>
+    {% endif %}
+{% endblock %}

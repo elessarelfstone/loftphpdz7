@@ -2,6 +2,7 @@
 /**
  *
  * Контроллер управления корзиной
+ *
  * @author Paintcast
  *
  */
@@ -24,12 +25,22 @@ class Orders extends LOFT_Controller
             $this->load->model('Cart_Model');
             $basket = $this->Cart_Model->getBasket($user_id);
 
-            // Подгружаем хелпер, получаем HTML-код для отображения корзины
-            $this->load->helper('htmlelement');
-            $temp = getHtmlForBasket($basket);
-            $this->setToData('basket', $temp);
+            // Получаем заказы пользователя по его ID
+            $this->load->model('Orders_Model');
+            $orders = $this->Orders_Model->getOrders($user_id);
 
-            $this->setToData('title', 'Корзина');
+            // Подгружаем хелпер для получения итоговой суммы содержимого корзины
+            if($basket)
+            {
+                $this->load->helper('htmlelement');
+                $total_price = getTotalPrice($basket);
+                $this->setToData('total_price', $total_price);
+            }
+
+            // Пушим всю инфу в шаблон
+            $this->setToData('basket', $basket);
+            $this->setToData('orders', $orders);
+
         }
         // Если пользователь не залогинен
         else
@@ -37,12 +48,17 @@ class Orders extends LOFT_Controller
             $this->setToData('title', 'Необходимо выполнить вход!');
         }
 
+        // Отображаем страницу
         $this->display('orders/orders');
     }
 
     /**
      * Метод для очистки содержимого корзины
+     *
+     * @param null $id_goods - если задано, то ID товара, который нужно удалить из корзины
+     *
      */
+
     public function clear($id_goods = null)
     {
         // Если пользователь залогинен
@@ -63,5 +79,109 @@ class Orders extends LOFT_Controller
         }
 
         header('Location: ' . base_url() . 'orders');
+    }
+
+    /**
+     * Метод для отображения содержимого заказа
+     *
+     * @param $id_order - ID заказа
+     *
+     * @return bool - false, если не передан ID заказа
+     */
+
+    public function view($id_order = null)
+    {
+        // Если пользователь залогинен и есть ID заказа
+        if ($this->session->has_userdata('login') && $id_order)
+        {
+            // Необходимо проверить есть ли доступ у текущего пользователя доступ к заказу с ID = $id_user
+            // Получаем login пользователя
+            $user_login = $this->session->userdata('login');
+
+            // Получаем ID пользователя по его login
+            $this->load->model('User_Model');
+            $id_user = $this->User_Model->getUserId($user_login);
+
+            // Проверяем принадлежность заказа в БД
+            $this->load->model('Orders_Model');
+            $flag = $this->Orders_Model->checkUserOrder($id_order, $id_user);
+
+            if($flag){
+                // Заказ принадлежит пользователю, получаем содержимое заказа
+                $order_content = $this->Orders_Model->showOrderContent($id_order);
+
+                // Подгружаем хелпер для получения итоговой суммы заказа
+                $this->load->helper('htmlelement');
+                $total_price = getTotalPrice($order_content);
+
+                // Пушим всю инфу в шаблон
+                $this->setToData('order_content', $order_content);
+                $this->setToData('total_price', $total_price);
+
+                // Устанавливаем заголовок
+                $this->setToData('title', 'Содержимое заказа #' . $id_order);
+            }
+            else
+            {
+                //заказ не принадлежит пользователю
+                $this->setToData('title', 'Содержимое заказа недоступно. Сорян!');
+            }
+
+            // Отображаем страницу
+            $this->display('orders/view');
+        }
+        // Если пользователь не залогинен и нет ID заказа
+        else
+        {
+            header('Location: ' . base_url() . 'orders');
+        }
+    }
+
+    /**
+     * Метод для оформления заказа
+     */
+    public function make()
+    {
+        // Если пользователь залогинен
+        if ($this->session->has_userdata('login'))
+        {
+            // Получаем ID пользователя по его login
+            $this->load->model('User_Model');
+            $user_login = $this->session->userdata('login');
+            $user_id = $this->User_Model->getUserId($user_login);
+
+            // Получаем содержимое корзины пользователя по его ID
+            $this->load->model('Cart_Model');
+            $basket = $this->Cart_Model->getBasket($user_id);
+
+            //Если коризина не пуста
+            if($basket)
+            {
+                // Выполняем оформление нового заказа
+                $this->load->model('Orders_Model');
+                $order_id = $this->Orders_Model->makeOrder($user_id, $basket);
+
+                // Очищаем корзину
+                $this->Cart_Model->clearBasket($user_id);
+
+                // Устанавливаем заголовок
+                $this->setToData('title', 'Заказ оформлен');
+                $this->setToData('order_id', $order_id);
+            }
+            // корзине пуста, не оформляем заказ
+            else
+            {
+                $this->setToData('title', 'Невозможно оформить заказ!');
+                $this->setToData('content', 'Корзина пуста. Сорян!');
+            }
+
+            // Отображаем страницу
+            $this->display('orders/make');
+        }
+        // Если пользователь не залогинен
+        else
+        {
+            header('Location: ' . base_url() . 'orders');
+        }
     }
 }

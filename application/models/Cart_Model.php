@@ -39,7 +39,7 @@ class Cart_Model extends LOFT_Model
         $this->db->where(array('id_user'=>$user_id));
         $cart_items = $this->db->get($this->table);
 
-        if ($cart_items)
+        if ($cart_items->num_rows())
         {
             return $cart_items->result_array();
         }
@@ -47,7 +47,6 @@ class Cart_Model extends LOFT_Model
         {
             return null;
         }
-
     }
 
 
@@ -65,7 +64,8 @@ class Cart_Model extends LOFT_Model
         {
             // Если передаётся id_goods, то удаляем этот товар
             $this->delete(array('id_user'=>$user_id, 'id_goods'=> $id_goods));
-        } else
+        }
+        else
         {
             // Если id_goods = null, то удаляем всё из корзины
             $this->delete(array('id_user'=>$user_id));

@@ -368,4 +368,132 @@ $data = array(
     }
 
 
+    /**
+     *
+     * Метод для отображения списка заказов в админке
+     *
+     * @author Paintcast
+     *
+     */
+    public function orders()
+    {
+        // подключаем модель
+        $this->load->model('Orders_Model');
+
+        // делаем запрос в БД
+        $orders = $this->Orders_Model->getAllOrders('orders.date_order DESC');
+        $this->setToData('orders', $orders);
+
+        // отображеем страницу
+        $this->display('admin/orders');
+    }
+
+    /**
+     *
+     * Метод отображения содержимого заказа
+     *
+     * @author Paintcast
+     *
+     * @param null $id_order - ID заказа
+     *
+     */
+    public function viewOrder($id_order = null)
+    {
+        if($id_order)
+        {
+            // подключаем модель + делаем запрос в БД
+            $this->load->model('Orders_Model');
+            $order_content = $this->Orders_Model->showOrderContent($id_order);
+            $this->setToData('order_content', $order_content);
+            $this->setToData('title', 'Содержимое заказа #'.$id_order);
+
+            // считаем итоговую сумму по заказу
+            $total_price = 0;
+
+            foreach($order_content as $item )
+            {
+                $total_price += $item['price'];
+            }
+
+            // пушим итоговую сумму в шаблон
+            $this->setToData('total_price', $total_price);
+
+            // отображеем страницу
+            $this->display('admin/vieworder');
+        }
+        else
+        {
+            header('Location: ' . base_url() . 'admin/orders');
+        }
+    }
+
+    /**
+     *
+     * Метод редактирования статуса заказа
+     *
+     * @author Paintcast
+     *
+     * @param null $id_order - ID заказа
+     *
+     */
+    public function editOrder($id_order = null)
+    {
+        if($id_order)
+        {
+            // подключаем модель + делаем запрос в БД
+            $this->load->model('Orders_Model');
+            $order_status = $this->Orders_Model->getOrderStatus($id_order);
+            $all_status = $this->Orders_Model->getAllStatus();
+
+            $this->setToData('order_status', $order_status);
+            $this->setToData('all_status', $all_status);
+            $this->setToData('id_order', $id_order);
+
+            $this->setToData('title', 'Редактирование статуса заказа #'.$id_order);
+
+            // отображеем страницу
+            $this->display('admin/editorder');
+        }
+        else
+        {
+            header('Location: ' . base_url() . 'admin/orders');
+        }
+    }
+
+
+    /**
+     * Метод изменения статуса заказа
+     *
+     * @author Paintcast
+     *
+     */
+    public function editstatus()
+    {
+        $new_status = $this->input->post('new_status');
+        $id_order = $this->input->post('id_order');
+
+        if($new_status && $id_order)
+        {
+            // подключаем модель + делаем запрос в БД
+            $this->load->model('Orders_Model');
+            $result = $this->Orders_Model->chageStatus($id_order, $new_status);
+
+            // анализируем результат запроса в БД
+            if($result)
+            {
+                $this->setToData('title', 'Cтатуса заказа #'.$id_order.' был изменён успешно.');
+            }
+            else
+            {
+                $this->setToData('title', 'Cтатуса заказа #'.$id_order.' не был изменён. Сорян');
+            }
+
+            // отображеем страницу
+            $this->display('admin/editstatus');
+        }
+        else
+        {
+            header('Location: ' . base_url() . 'admin/orders');
+        }
+    }
 }

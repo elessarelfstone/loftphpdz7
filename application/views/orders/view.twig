@@ -1,0 +1,44 @@
+{% extends 'main_template.twig' %}
+
+{% block header %}
+    <h3>  {{ title }} </h3>
+{% endblock %}
+
+{% block content %}
+
+    {% if order_content %}
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Название товара</th>
+                    <th>Количество</th>
+                    <th>Цена</th>
+                </tr>
+            </thead>
+            <tbody>
+
+        {% for order_item in order_content %}
+                <tr>
+                    <td>{{ order_item.id_goods }}</td>
+                    <td>{{ order_item.title }}</td>
+                    <td>{{ order_item.cnt }}</td>
+                    <td>{{ order_item.price }}</td>
+                </tr>
+        {% endfor %}
+
+                <tr>
+                    <td colspan = "3" align="right">Итого: </td>
+                <td>{{ total_price }}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        {% else %}
+
+        Содержимое заказа недоступно. Сорян!
+
+    {% endif %}
+
+{% endblock %}
