@@ -1,0 +1,23 @@
+{% extends 'admin_main_template.twig' %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-12"><h3>{{ title }}</h3></div>
+        <form action="{{ base_url }}admin/editstatus/" method="post">
+            <input type="hidden" name="id_order" value="{{ id_order }}">
+    </div>
+{% for item in all_status %}
+    <div class="radio">
+        <label>
+            <input type="radio" name="new_status" id="new_status" value="{{ item.id }}"
+            {% if item.id == order_status.id_status %}
+                checked
+            {% endif %}
+            >{{ item.title }}
+        </label>
+    </div>
+{% endfor %}
+    <div class="row">
+        <div class="col-md-12" align="left"><button type="submit" class="btn btn-default">Сменить статус</button></div>
+    </div>
+{% endblock %}

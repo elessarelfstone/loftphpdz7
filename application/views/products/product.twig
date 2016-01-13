@@ -5,5 +5,14 @@
 {% endblock %}
 
 {% block content %}
-    {{ product_info | raw }}
+    <div class="col-md-12">
+        <p>Title: {{ product_info.title }}</p>
+        <p>Category: {{ product_info.category }}</p>
+        <p>Brand: {{ product_info.brand }}</p>
+        <p>Price: {{ product_info.price }}</p>
+        <p>Description: {{ product_info.description }}</p>
+        <p>
+            <a href="{{ base_url }}user/add/{{ product_info.id }}" class="addProduct btn btn-primary btn-xs">В корзину</a>
+        </p>
+    </div>
 {% endblock %}

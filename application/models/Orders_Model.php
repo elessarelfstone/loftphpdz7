@@ -4,11 +4,19 @@ class Orders_Model extends LOFT_Model
 {
     public $table = 'orders';
 
-    function getAllOrders()
+    // from Paintcast: я тут чуток допилил метод, чтобы не создавать ещё один :)
+    function getAllOrders($order_by = null)
     {
-        $this->db->select('orders.id, orders.id_user, orders.id_status, orders.date_order, users.name uname, users.lastname');
+        $this->db->select('orders.id, orders.id_user, orders.id_status, orders.date_order, users.name uname, users.lastname, status.title');
         $this->db->from('orders');
-        $this->db->join('users', 'orders.id_user = users.id.');
+        $this->db->join('users', 'orders.id_user = users.id');
+        $this->db->join('status', 'orders.id_status = status.id');
+
+        if($order_by)
+        {
+            $this->db->order_by($order_by);
+        }
+
         $result = $this->db->get();
         return $result->result_array();
     }
@@ -97,4 +105,66 @@ class Orders_Model extends LOFT_Model
             return false;
         }
     }
+
+    /**
+     *
+     * Метод получения статуса заказа по его ID
+     *
+     * @author Paintcast
+     *
+     * @param $id_order - ID заказа
+     * @return mixed - статус заказа
+     */
+
+    public function getOrderStatus($id_order)
+    {
+        $this->db->select('orders.id_status, status.title');
+        $this->db->from('orders');
+        $this->db->join('status', 'status.id = orders.id_status');
+        $this->db->where(array('orders.id'=>$id_order));
+        $result = $this->db->get();
+        return $result->row_array();
+    }
+
+    /**
+     *
+     * Метод получения всех статусов из таблицы status
+     *
+     * @author Paintcast
+     *
+     * @return mixed - массив статусов + их ID
+     *
+     */
+
+    public function getAllStatus()
+    {
+        $this->db->select('status.*');
+        $this->db->from('status');
+        $result = $this->db->get();
+
+        return $result->result_array();
+    }
+
+
+    /**
+     *
+     * Метод для изменения статуса заказа
+     *
+     * @author Paintcast
+     *
+     * @param $id_order - ID заказа
+     * @param $new_status - ID статуса
+     * @return mixed
+     */
+    public function chageStatus($id_order, $new_status)
+    {
+        $this->db->trans_start();
+        $this->db->set('orders.id_status', $new_status);
+        $this->db->where('orders.id', $id_order);
+        $result = $this->db->update('orders');
+        $this->db->trans_complete();
+
+        return $result;
+    }
+
 }

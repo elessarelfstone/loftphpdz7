@@ -70,13 +70,9 @@ class Products extends LOFT_Controller
         // делаем запрос в БД по переданному ID
         $product_info = $this->Products_Model->getProductByID($id);
 
-        // Устанавливаем тайтл страницы = значению поля title
+        // Устанавливаем тайтл + пушим инфу о товаре в шаблон
         $this->setToData('title', $product_info->title);
-
-        // подгружаем хелпер, получаем HTML-код для отображения информации о товаре
-        $this->load->helper('htmlelement');
-        $temp = getHtmlForProduct($product_info);
-        $this->setToData('product_info', $temp);
+        $this->setToData('product_info', $product_info);
 
         // отображаем страницу через шаблон product.twig
         $this->display('products/product');

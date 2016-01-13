@@ -29,12 +29,18 @@ class Orders extends LOFT_Controller
             $this->load->model('Orders_Model');
             $orders = $this->Orders_Model->getOrders($user_id);
 
-            // Подгружаем хелпер, получаем HTML-код для отображения корзины / заказов
-            $this->load->helper('htmlelement');
-            $temp = getHtmlForBasket($basket, $orders);
-            $this->setToData('basket', $temp);
+            // Подгружаем хелпер для получения итоговой суммы содержимого корзины
+            if($basket)
+            {
+                $this->load->helper('htmlelement');
+                $total_price = getTotalPrice($basket);
+                $this->setToData('total_price', $total_price);
+            }
 
-            // $this->setToData('title', 'Корзина');
+            // Пушим всю инфу в шаблон
+            $this->setToData('basket', $basket);
+            $this->setToData('orders', $orders);
+
         }
         // Если пользователь не залогинен
         else
@@ -42,6 +48,7 @@ class Orders extends LOFT_Controller
             $this->setToData('title', 'Необходимо выполнить вход!');
         }
 
+        // Отображаем страницу
         $this->display('orders/orders');
     }
 
@@ -103,10 +110,13 @@ class Orders extends LOFT_Controller
                 // Заказ принадлежит пользователю, получаем содержимое заказа
                 $order_content = $this->Orders_Model->showOrderContent($id_order);
 
-                // Подгружаем хелпер, получаем HTML-код для отображения содержимого заказа
+                // Подгружаем хелпер для получения итоговой суммы заказа
                 $this->load->helper('htmlelement');
-                $temp = getHtmlForOrderView($order_content);
-                $this->setToData('order_content', $temp);
+                $total_price = getTotalPrice($order_content);
+
+                // Пушим всю инфу в шаблон
+                $this->setToData('order_content', $order_content);
+                $this->setToData('total_price', $total_price);
 
                 // Устанавливаем заголовок
                 $this->setToData('title', 'Содержимое заказа #' . $id_order);
@@ -154,11 +164,9 @@ class Orders extends LOFT_Controller
                 // Очищаем корзину
                 $this->Cart_Model->clearBasket($user_id);
 
-                // Устанавливаем заголовок + хелпер для хтмл-кода страницы
-                $this->setToData('title', 'Заказ #' . $order_id . ' оформлен');
-                $this->load->helper('htmlelement');
-                $temp = getHtmlForOrderMake($order_id);
-                $this->setToData('content', $temp);
+                // Устанавливаем заголовок
+                $this->setToData('title', 'Заказ оформлен');
+                $this->setToData('order_id', $order_id);
             }
             // корзине пуста, не оформляем заказ
             else
