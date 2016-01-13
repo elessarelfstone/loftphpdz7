@@ -46,7 +46,7 @@ class Search_model extends LOFT_Model
         $this->db->where(array('price>='=>$array["minprice"], 'price<='=>$array["maxprice"]));
         if ($array["query"]!='') {
             $this->db->like('title', $array["query"]);
-            $this->db->like('description', $array["query"]);
+            $this->db->or_like('description', $array["query"]);
         }
 
         if($array['category']!=0)
