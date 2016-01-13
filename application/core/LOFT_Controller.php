@@ -60,6 +60,8 @@ class LOFT_Controller extends CI_Controller
             $this->load->model('User_Model');
             $user_info = $this->User_Model->get(array('email'=>$email));
             $items_cnt = $this->Cart_Model->getSum('cnt', array('id_user'=>$user_info['id']));
+            if ($this->User_Model->isAdmin($email))
+                $this->setToData('admin', 1);
             $this->setToData('cnt', $items_cnt['cnt']);
         }
 

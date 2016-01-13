@@ -24,7 +24,6 @@ class User_Model extends LOFT_Model
         }
         else
                 $result['status'] = 2;
-
         return $result;
     }
 
@@ -57,7 +56,6 @@ class User_Model extends LOFT_Model
 
     }
 
-
     public function getAllUsers($page, $limit, $is_active = NULL)
     {
         $this->db->select('users.id, users.`name`, users.lastname, users.email, users.is_active');
@@ -78,7 +76,6 @@ class User_Model extends LOFT_Model
         $this->db->limit(0,0);
         $result = $this->db->get();
         return $result->result_array()[0];
-
     }
 
     public function getCountAllUsers($is_active = NULL)
@@ -91,4 +88,15 @@ class User_Model extends LOFT_Model
         $result = $this->db->get();
         return count($result->result_array());
     }
+
+    public function isAdmin($login)
+    {
+        $result = false;
+        $arr = $this->get(array('email'=>$login, 'is_active'=>2));
+        if (sizeof($arr))
+            $result = true;
+        return $result;
+    }
+
+
 }
