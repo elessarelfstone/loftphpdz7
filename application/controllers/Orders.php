@@ -167,6 +167,33 @@ class Orders extends LOFT_Controller
                 // Устанавливаем заголовок
                 $this->setToData('title', 'Заказ оформлен');
                 $this->setToData('order_id', $order_id);
+
+                // отправить мыло админу
+                // включаем библиотеку для отправки писем
+                $this->load->library('email');
+
+                // Получаем мыла админов, их is_active в базе = 2
+                $this->load->model('User_Model');
+                $emails = $this->User_Model->getAllUserEmails(2);
+
+                if($emails)
+                {
+                    foreach ($emails as $email)
+                    {
+                        $this->email->from($this->config->item('from_email'), 'Интернет каталог');
+                        $this->email->to($email['email'], 'Админу сайта');
+                        $this->email->subject('Новый заказ #' . $order_id);
+                        $this->email->message('Здрасти! Данное письмо уведомляет о том, что имеется новый заказ #'. $order_id);
+                        $this->email->send();
+                    }
+                }
+
+                //TODO отправляем мыло пользователю
+                $this->email->from($this->config->item('from_email'), 'Интернет каталог');
+                $this->email->to($user_login, 'Пользователю сайта');
+                $this->email->subject('Ваш заказ #' . $order_id);
+                $this->email->message('Здрасти! Данное письмо уведомляет о том, ваш заказ #'. $order_id . ' успешно получен.');
+                $this->email->send();
             }
             // корзине пуста, не оформляем заказ
             else
