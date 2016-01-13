@@ -24,8 +24,9 @@ class Search_model extends LOFT_Model
     {
         $this->db->where(array('price>='=>$array["minprice"], 'price<='=>$array["maxprice"]));
         if ($array["query"]!='') {
-            $this->db->like('title', $array["query"]);
-            $this->db->like('description', $array["query"]);
+            $query_like = array('title'=>$array['query'], 'description'=>$array['query']);
+
+            $this->db->like($query_like);
         }
 
         if($array['category']!=0)
@@ -45,8 +46,9 @@ class Search_model extends LOFT_Model
     {
         $this->db->where(array('price>='=>$array["minprice"], 'price<='=>$array["maxprice"]));
         if ($array["query"]!='') {
-            $this->db->like('title', $array["query"]);
-            $this->db->like('description', $array["query"]);
+            $query_like = array('title'=>$array['query'], 'description'=>$array['query']);
+
+            $this->db->like($query_like);
         }
 
         if($array['category']!=0)
