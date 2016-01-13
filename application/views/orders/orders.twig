@@ -5,5 +5,93 @@
 {% endblock %}
 
 {% block content %}
-    {{ basket | raw }}
+    <div>
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active"><a href="#basket" aria-controls="home" role="tab" data-toggle="tab">Корзина</a></li>
+            <li role="presentation"><a href="#orders" aria-controls="profile" role="tab" data-toggle="tab">Заказы</a></li>
+        </ul>
+
+        <!-- Tab panes -->
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" id="basket" style="margin-top: 20px;">
+
+                {% if basket %}
+
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Наименование товара</th>
+                        <th>Количество</th>
+                        <th>Цена</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    {% for basket_item in basket %}
+                    <tr>
+                        <td>{{ basket_item.id_goods }}</td>
+                        <td><a href="{{ base_url }}products/product/{{ basket_item.id_goods }}">{{ basket_item.title }}</a></td>
+                        <td>{{ basket_item.cnt }}</td>
+                        <td>{{ basket_item.price }}</td>
+                        <td><a href="{{ base_url }}orders/clear/{{ basket_item.id_goods }}"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a></td>
+                    </tr>
+                    {% endfor %}
+
+                    <tr>
+                        <td colspan="2">
+                            <a href="{{ base_url }}orders/clear/" class="btn btn-primary btn-xs">Очистить корзину</a>
+                            <a href="{{ base_url }}orders/make/" class="btn btn-primary btn-xs">Оформить заказ</a>
+                        </td>
+                        <td align="right" nowrap>Итого к оплате:</td>
+                        <td colspan="2">{{ total_price }}</td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                {% else %}
+
+                    В корзине пусто! Сорян!
+
+                {% endif %}
+
+            </div>
+            <div role="tabpanel" class="tab-pane" id="orders" style="margin-top: 20px;">
+
+                {% if orders %}
+
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Дата заказа</th>
+                        <th>Содержимое</th>
+                        <th>Сумма заказа</th>
+                        <th>Статус</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    {% for order_item in orders %}
+                    <tr>
+                        <td>{{ order_item.date_order }}</td>
+                        <td><a href="{{ base_url }}orders/view/{{ order_item.id }}">Содержимое заказа #{{ order_item.id }}</a></td>
+                        <td>{{ order_item.price }}</td>
+                        <td>{{ order_item.status }}</td>
+                    </tr>
+                    {% endfor %}
+
+                    </tbody>
+                </table>
+
+                {% else %}
+
+                    Заказов нет. Сорян!
+
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
 {% endblock %}
