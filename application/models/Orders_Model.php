@@ -167,4 +167,22 @@ class Orders_Model extends LOFT_Model
         return $result;
     }
 
+    /**
+     *
+     * Метод получения email пользователя, которому принадлежит заказ с id = id_order
+     *
+     * @param $id_order - ID заказа
+     * @return string - email пользователя
+     */
+    public function getEmailByOrderID($id_order)
+    {
+        $this->db->select('orders.*, users.email');
+        $this->db->from('orders');
+        $this->db->join('users', 'orders.id_user = users.id');
+        $this->db->where(array('orders.id'=>$id_order));
+        $result = $this->db->get()->row_array();
+
+        return $result['email'];
+    }
+
 }

@@ -367,6 +367,44 @@ $data = array(
 
     }
 
+    public function sendmails()
+    {
+        $this->load->library('session');
+
+        if(($this->input->server('REQUEST_METHOD') == 'POST')){
+            $whom = $this->input->post('is_active');
+            $subject = $this->input->post('subject');
+            $message = $this->input->post('message');
+            $this->load->model('User_Model');
+
+            $emails = $this->User_Model->getAllUserEmails($whom);
+
+            // включаем библиотеку для отправки писем
+            $this->load->library('email');
+
+
+            foreach ($emails as $email)
+            {
+                $this->email->from($this->config->item('from_email'), 'Интернет каталог');
+                $this->email->to($email['email'], 'Пользователю сайта');
+                $this->email->subject($subject);
+                $this->email->message($message);
+                $this->email->send();
+            }
+            $this->session->set_flashdata('success_send', true);
+            redirect('admin/sendmails');
+
+
+        }
+        if($this->session->flashdata('success_send')) {
+
+            $this->setToData('success', 'Письма отправлены');
+            $this->session->set_flashdata('success_send'. FALSE);
+        }
+
+        $this->display('admin/sendmails');
+    }
+
 
     /**
      *
@@ -482,6 +520,18 @@ $data = array(
             if($result)
             {
                 $this->setToData('title', 'Cтатуса заказа #'.$id_order.' был изменён успешно.');
+
+                // Получаем email владельца заказа + статус заказа
+                $email = $this->Orders_Model->getEmailByOrderID($id_order);
+                $order_status = $this->Orders_Model->getOrderStatus($id_order);
+
+                // Отправляем мыло пользователю
+                $this->load->library('email');
+                $this->email->from($this->config->item('from_email'), 'Интернет каталог');
+                $this->email->to($email, 'Пользователю сайта');
+                $this->email->subject('Ваш заказ #' . $id_order);
+                $this->email->message('Здрасти! Статус заказа #'. $id_order . ' успешно изменён на «'. $order_status['title'] .'».');
+                $this->email->send();
             }
             else
             {

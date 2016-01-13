@@ -1,0 +1,25 @@
+{% extends 'admin_main_template.twig' %}
+
+{% block content %}
+
+    {{ success }}
+<form method="post">
+    <div class="form-group">
+        <label for="is_active" class="control-label">Кому отправляем</label>
+        <select name="is_active" id="is_active" class="form-control">
+            <option value="3" >Всем</option>
+            <option value="0" >Не активированым</option>
+            <option value="1" >Пользователям</option>
+            <option value="2" >Админам</option>
+        </select>
+
+        <label for="subject" class="control-label">Тема письма</label>
+        <input type="text" class="form-control" id="subject" name="subject" value="" required>
+
+
+        <label for="mail" class="control-label">Содержимое письма</label>
+        <textarea name="mail" id="mail" rows="10" class="form-control" required></textarea><br />
+    <input type="submit" class="btn btn-default" value="Отправить">
+    </div>
+</form>
+{% endblock %}
