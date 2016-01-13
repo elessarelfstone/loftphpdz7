@@ -367,5 +367,43 @@ $data = array(
 
     }
 
+    public function sendmails()
+    {
+        $this->load->library('session');
+
+        if(($this->input->server('REQUEST_METHOD') == 'POST')){
+            $whom = $this->input->post('is_active');
+            $subject = $this->input->post('subject');
+            $message = $this->input->post('message');
+            $this->load->model('User_Model');
+
+            $emails = $this->User_Model->getAllUserEmails($whom);
+
+            // включаем библиотеку для отправки писем
+            $this->load->library('email');
+
+
+            foreach ($emails as $email)
+            {
+                $this->email->from($this->config->item('from_email'), 'Интернет каталог');
+                $this->email->to($email['email'], 'Пользователю сайта');
+                $this->email->subject($subject);
+                $this->email->message($message);
+                $this->email->send();
+            }
+            $this->session->set_flashdata('success_send', true);
+            redirect('admin/sendmails');
+
+
+        }
+        if($this->session->flashdata('success_send')) {
+
+            $this->setToData('success', 'Письма отправлены');
+            $this->session->set_flashdata('success_send'. FALSE);
+        }
+
+        $this->display('admin/sendmails');
+    }
+
 
 }
