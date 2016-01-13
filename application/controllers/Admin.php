@@ -520,6 +520,18 @@ $data = array(
             if($result)
             {
                 $this->setToData('title', 'Cтатуса заказа #'.$id_order.' был изменён успешно.');
+
+                // Получаем email владельца заказа + статус заказа
+                $email = $this->Orders_Model->getEmailByOrderID($id_order);
+                $order_status = $this->Orders_Model->getOrderStatus($id_order);
+
+                // Отправляем мыло пользователю
+                $this->load->library('email');
+                $this->email->from($this->config->item('from_email'), 'Интернет каталог');
+                $this->email->to($email, 'Пользователю сайта');
+                $this->email->subject('Ваш заказ #' . $id_order);
+                $this->email->message('Здрасти! Статус заказа #'. $id_order . ' успешно изменён на «'. $order_status['title'] .'».');
+                $this->email->send();
             }
             else
             {

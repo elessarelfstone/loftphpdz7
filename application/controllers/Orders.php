@@ -168,7 +168,7 @@ class Orders extends LOFT_Controller
                 $this->setToData('title', 'Заказ оформлен');
                 $this->setToData('order_id', $order_id);
 
-                // отправить мыло админу
+                // Отправить мыло админу
                 // включаем библиотеку для отправки писем
                 $this->load->library('email');
 
@@ -188,7 +188,7 @@ class Orders extends LOFT_Controller
                     }
                 }
 
-                //TODO отправляем мыло пользователю
+                // Отправляем мыло пользователю
                 $this->email->from($this->config->item('from_email'), 'Интернет каталог');
                 $this->email->to($user_login, 'Пользователю сайта');
                 $this->email->subject('Ваш заказ #' . $order_id);
