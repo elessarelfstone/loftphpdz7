@@ -6,17 +6,18 @@ class Admin extends LOFT_Controller
     {
         parent::__construct();
         $this->load->library('session');
-        if (!$this->session->has_userdata('login')){
+        $this->load->model('User_Model');
+        $login = $this->session->userdata('login');
+        if ((!$this->session->has_userdata('login')) || (!$this->User_Model->isAdmin($login))){
             $this->display('admin/error');
+            exit;
         }
-        exit;
+
     }
 
 
     public function categories()
     {
-
-
         $this->load->model('Categories_Model');
         $categories = $this->Categories_Model->getAll();
         $this->setToData('categories', $categories);

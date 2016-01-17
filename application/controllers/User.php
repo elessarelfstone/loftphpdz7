@@ -6,6 +6,7 @@ if (!defined('BASEPATH')) {
 class User extends LOFT_Controller
 {
 
+
     public function login()
     {
         // получение данных с формы
