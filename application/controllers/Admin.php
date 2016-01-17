@@ -1,13 +1,22 @@
 <?php
 
-use Goodby\CSV\Import\Standard\Interpreter;
-use Goodby\CSV\Import\Standard\Lexer;
-use Goodby\CSV\Import\Standard\LexerConfig;
-
 class Admin extends LOFT_Controller
 {
+    public function __construct()
+    {
+        parent::__construct();
+        $this->load->library('session');
+        if (!$this->session->has_userdata('login')){
+            $this->display('admin/error');
+        }
+        exit;
+    }
+
+
     public function categories()
     {
+
+
         $this->load->model('Categories_Model');
         $categories = $this->Categories_Model->getAll();
         $this->setToData('categories', $categories);

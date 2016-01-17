@@ -23,12 +23,23 @@
         )); ?>
         <?php echo form_error('subject', '<div style="color: coral">', '</div>'); ?>
     </div>
-
+    <div class="form-group">
+        <?php echo form_label('Введите каптчу', 'captcha'); ?>
+        <p><?php echo $image ?></p>
+        <?php echo form_input(array(
+            'name' => 'captcha',
+            'class' => 'form-control',
+            'id' => 'contact-captcha'
+        )); ?>
+        <br />
+        <br />
+        <?php echo form_error('captcha', '<div style="color: coral">', '</div>'); ?>
+    </div>
     <div class="form-group">
         <?php echo form_label('Текст письма', 'message'); ?>
         <?php echo form_textarea(array(
             'name' => 'message',
-            'placeholder' => 'Укажите текс письма',
+            'placeholder' => 'Укажите текст письма',
             'class' => 'form-control',
             'id' => 'contact-message',
             'value' => set_value('message')
@@ -37,6 +48,8 @@
         <br />
         <?php echo form_error('message', '<div style="color: coral">', '</div>'); ?>
     </div>
+
+
 
     <button type="submit" class="btn btn-default">Отправить</button>
 
