@@ -25,6 +25,7 @@ $(document).ready(function(){
                     data: formdata,
                     dataType: 'json',
                     success : function(dataSuccess){
+
                         if (dataSuccess.result.status == 0){
                             $('#fio').removeClass('hidden').children('.fio').text(dataSuccess.result.lastname+' '+dataSuccess.result.name);
                             $('.cart').removeClass('hidden');
@@ -35,10 +36,12 @@ $(document).ready(function(){
                             $('.goods-cnt').text(cnt);
                             $('#loginAuth').modal('hide');
                         }
-                        else
+                        else if(dataSuccess.result.status == 3)
                         {
-                            $('#error_message').text('Логин или пароль не верны');
+                           $('#err_message').text('Ваша учётная запись не активирована');
                         }
+                        else
+                            $('#err_message').text('Логин или пароль не верны');
                     }
                 })
             }

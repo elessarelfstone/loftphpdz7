@@ -12,15 +12,17 @@ class User_Model extends LOFT_Model
         $res = $this->get(array('email'=>$login));
         if (count($res) > 0)
         {
-            $hash = $res['password'];
-            if (password_verify($pass, $hash))
-            {
-                $result['status'] = 0;
-                $result['name'] = $res['name'];
-                $result['lastname'] = $res['lastname'];
+            if ($res['is_active']>0) {
+                $hash = $res['password'];
+                if (password_verify($pass, $hash)) {
+                    $result['status'] = 0;
+                    $result['name'] = $res['name'];
+                    $result['lastname'] = $res['lastname'];
+                } else
+                    $result['status'] = 1;
             }
             else
-                $result['status'] = 1;
+                $result['status'] = 3;
         }
         else
                 $result['status'] = 2;
